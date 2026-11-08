@@ -1,0 +1,18 @@
+
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/api/v1/:path*",
+      "destination": "https://seguridad-ciudadana-production.up.railway.app/api/v1/:path*"
+    },
+    {
+      "source": "/api/v1",
+      "destination": "https://seguridad-ciudadana-production.up.railway.app/api/v1"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
