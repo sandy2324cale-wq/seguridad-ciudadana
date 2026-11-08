@@ -477,17 +477,18 @@ public class SecurityConfig {
 
         // ORIGENES AUTORIZADOS: desarrollo local, Tailscale y Funnel HTTPS
         configuration.setAllowedOrigins(
-            List.of(
-                "http://localhost:4200",
-                "http://127.0.0.1:4200",
-                "http://localhost:3000",
-                "http://127.0.0.1:3000",
-                "http://100.114.156.7:4200",
-                "http://localhost:5173",
-                "https://opulent-eureka-pjvg955vw74j27xxr-4200.app.github.dev",
-                "https://sandy.tail074548.ts.net"
-            )
-        );
+    List.of(
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://100.114.156.7:4200",
+        "http://localhost:5173",
+        "https://opulent-eureka-pjvg955vw74j27xxr-4200.app.github.dev",
+        "https://sandy.tail074548.ts.net",
+        "https://seguridad-ciudadana-kohl.vercel.app"
+    )
+);
         // METODOS HTTP
 
         configuration.setAllowedMethods(
