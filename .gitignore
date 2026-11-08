@@ -1,0 +1,36 @@
+
+# Angular
+**/node_modules/
+**/dist/
+**/.angular/
+
+# Maven y Java
+**/target/
+
+# Gradle
+**/build/
+**/.gradle/
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Configuraciones locales con secretos
+**/application-local.properties
+**/application-secrets.properties
+
+# Certificados y claves
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Temporales
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+**/.git-respaldo/

@@ -1,0 +1,449 @@
+
+<div class="gestion">
+
+  <header class="encabezado">
+    <div>
+      <a routerLink="/dashboard" class="volver">
+        ← Volver al panel
+      </a>
+
+      <span class="subtitulo">CENTRO DE OPERACIONES</span>
+      <h1>Gestión de incidentes</h1>
+
+      <p>
+        Consulta reportes, asigna agencias de respuesta
+        y registra cambios de estado.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="boton boton-secundario"
+      (click)="cargarIncidentes()"
+      [disabled]="cargando()"
+    >
+      ↻ Actualizar
+    </button>
+  </header>
+
+  <div class="guia-operador" role="note">
+    <span class="guia-icono" aria-hidden="true">✓</span>
+    <div><strong>Flujo de atención</strong><p>Selecciona un reporte, asigna una agencia de respuesta y registra cada avance con una observación. Los cambios quedan registrados en el historial.</p></div>
+  </div>
+
+  <!-- RESUMEN -->
+
+  <section class="resumen" aria-label="Resumen de incidentes">
+
+    <article class="resumen-tarjeta">
+      <span>Pendientes</span>
+      <strong>{{ cargando() ? '...' : totalPendientes }}</strong>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>En atención</span>
+      <strong>{{ cargando() ? '...' : totalEnAtencion }}</strong>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>Resueltos</span>
+      <strong>{{ cargando() ? '...' : totalResueltos }}</strong>
+    </article>
+
+  </section>
+
+  <!-- MENSAJES -->
+
+  <div *ngIf="error()" class="mensaje error" role="alert">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="mensaje()" class="mensaje exito" role="status">
+    {{ mensaje() }}
+  </div>
+
+  <!-- FILTROS -->
+
+  <section class="panel-filtros">
+
+    <div class="campo">
+      <label for="busqueda">Buscar incidente</label>
+
+      <input
+        id="busqueda"
+        type="search"
+        [(ngModel)]="busqueda"
+        placeholder="Título, zona, categoría o número..."
+      />
+    </div>
+
+    <div class="campo">
+      <label for="filtroEstado">Filtrar por estado</label>
+
+      <select
+        id="filtroEstado"
+        [(ngModel)]="filtroEstado"
+      >
+        <option value="TODOS">Todos los estados</option>
+        <option value="PENDIENTE">Pendientes</option>
+        <option value="EN_ATENCION">En atención</option>
+        <option value="RESUELTO">Resueltos</option>
+        <option value="FALSO_REPORTE">Falsos reportes</option>
+      </select>
+    </div>
+
+  </section>
+
+  <!-- LISTADO -->
+
+  <section class="listado">
+
+    <div class="titulo-seccion">
+      <h2>Incidentes registrados</h2>
+      <span>{{ incidentesFiltrados.length }} resultados</span>
+    </div>
+
+    <div *ngIf="cargando()" class="estado-vacio">
+      Cargando incidentes...
+    </div>
+
+    <div
+      *ngIf="!cargando() && !error() && incidentesFiltrados.length === 0"
+      class="estado-vacio"
+    >
+      No se encontraron incidentes con estos filtros.
+    </div>
+
+    <div class="lista-incidentes" *ngIf="!cargando()">
+
+      <article
+        *ngFor="let incidente of incidentesFiltrados"
+        class="incidente"
+        [class.seleccionado]="seleccionado()?.id === incidente.id"
+      >
+
+        <div class="incidente-contenido">
+
+          <div class="incidente-superior">
+            <span class="numero">
+              REPORTE #{{ incidente.id }}
+            </span>
+
+            <span
+              class="estado"
+              [ngClass]="incidente.estado.toLowerCase()"
+            >
+              {{ etiquetaEstado(incidente.estado) }}
+            </span>
+          </div>
+
+          <h3>{{ incidente.titulo }}</h3>
+
+          <p>{{ incidente.descripcion }}</p>
+
+          <div class="metadatos">
+            <span>◎ {{ incidente.nombreZona }}</span>
+            <span>▦ {{ incidente.nombreCategoria }}</span>
+            <span>
+              ◷ {{ incidente.fechaReporte | date:'dd/MM/yyyy HH:mm' }}
+            </span>
+          </div>
+
+          <div class="agencia-actual">
+            Agencia: {{ nombreAgencia(incidente.agenciaId) }}
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="boton boton-primario"
+          (click)="seleccionarIncidente(incidente)"
+          [disabled]="operacionEnCurso"
+        >
+          Gestionar
+        </button>
+
+      </article>
+
+    </div>
+
+  </section>
+
+  <!-- DETALLE DEL INCIDENTE -->
+
+  <section
+    *ngIf="seleccionado() as incidente"
+    class="detalle-panel"
+    aria-label="Gestión del incidente seleccionado"
+  >
+
+    <div class="detalle-encabezado">
+
+      <div>
+        <span class="subtitulo">
+          INCIDENTE #{{ incidente.id }}
+        </span>
+
+        <h2>{{ incidente.titulo }}</h2>
+
+        <p>
+          {{ incidente.callePrincipal }}
+          <ng-container *ngIf="incidente.calleSecundaria">
+            y {{ incidente.calleSecundaria }}
+          </ng-container>
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="cerrar"
+        (click)="cerrarDetalle()"
+        [disabled]="operacionEnCurso"
+        aria-label="Cerrar detalle"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div *ngIf="cargandoDetalle()" class="mensaje info" role="status">Actualizando detalles del incidente...</div>
+    <div *ngIf="errorDetalle()" class="mensaje error" role="alert">{{ errorDetalle() }}</div>
+
+    <div class="estado-actual">
+      <span>Estado actual</span>
+      <strong>{{ etiquetaEstado(incidente.estado) }}</strong>
+    </div>
+
+    <div class="datos-incidente">
+      <div><span>Zona</span><strong>{{ incidente.nombreZona }}</strong></div>
+      <div><span>Categoría</span><strong>{{ incidente.nombreCategoria }}</strong></div>
+      <div><span>Agencia asignada</span><strong>{{ nombreAgencia(incidente.agenciaId) }}</strong></div>
+      <div><span>Fecha del reporte</span><strong>{{ incidente.fechaReporte | date:'dd/MM/yyyy HH:mm' }}</strong></div>
+    </div>
+
+    <div class="formularios">
+
+      <!-- ASIGNAR AGENCIA -->
+
+      <form
+        class="formulario"
+        (ngSubmit)="asignarAgencia()"
+      >
+
+        <div class="formulario-icono" aria-hidden="true">▣</div>
+        <h3>Asignar agencia</h3>
+
+        <p>
+          Selecciona la entidad que atenderá el incidente.
+        </p>
+
+        <div class="campo">
+          <label for="agencia">Agencia de respuesta</label>
+
+          <select
+            id="agencia"
+            name="agencia"
+            [(ngModel)]="agenciaId"
+            [disabled]="operacionEnCurso"
+            required
+          >
+            <option [ngValue]="null">
+              Seleccionar agencia
+            </option>
+
+            <option
+              *ngFor="let agencia of agencias()"
+              [ngValue]="agencia.id"
+            >
+              {{ agencia.nombre }} ({{ agencia.siglas }})
+            </option>
+          </select>
+        </div>
+
+        <div
+          *ngIf="errorAgencias()"
+          class="mensaje error"
+          role="alert"
+        >
+          {{ errorAgencias() }}
+        </div>
+
+        <div class="campo">
+          <label for="observacionAgencia">
+            Observación
+          </label>
+
+          <textarea
+            id="observacionAgencia"
+            name="observacionAgencia"
+            [(ngModel)]="observacionAgencia"
+            maxlength="255"
+            rows="4"
+            required
+            [disabled]="operacionEnCurso"
+            placeholder="Describe el motivo de la asignación..."
+          ></textarea>
+
+          <small>
+            {{ observacionAgencia.length }}/255 caracteres
+          </small>
+        </div>
+
+        <button
+          type="submit"
+          class="boton boton-primario"
+          [disabled]="operacionEnCurso || !agenciaId || !observacionAgencia.trim()"
+        >
+          {{
+            guardandoAgencia()
+              ? 'Guardando...'
+              : 'Guardar asignación'
+          }}
+        </button>
+
+      </form>
+
+      <!-- CAMBIAR ESTADO -->
+
+      <form
+        class="formulario"
+        (ngSubmit)="cambiarEstado()"
+      >
+
+        <div class="formulario-icono" aria-hidden="true">↗</div>
+        <h3>Cambiar estado</h3>
+
+        <p>
+          Registra el avance de atención del incidente.
+        </p>
+
+        <div class="campo">
+          <label for="nuevoEstado">Nuevo estado</label>
+
+          <select
+            id="nuevoEstado"
+            name="nuevoEstado"
+            [(ngModel)]="nuevoEstado"
+            [disabled]="operacionEnCurso"
+            required
+          >
+            <option value="">Seleccionar estado</option>
+
+            <option
+              *ngFor="let estado of estados"
+              [value]="estado"
+              [disabled]="estado === incidente.estado"
+            >
+              {{ etiquetaEstado(estado) }}
+            </option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="observacionEstado">
+            Observación del cambio
+          </label>
+
+          <textarea
+            id="observacionEstado"
+            name="observacionEstado"
+            [(ngModel)]="observacionEstado"
+            maxlength="255"
+            rows="4"
+            required
+            [disabled]="operacionEnCurso"
+            placeholder="Describe la acción realizada..."
+          ></textarea>
+
+          <small>
+            {{ observacionEstado.length }}/255 caracteres
+          </small>
+        </div>
+
+        <button
+          type="submit"
+          class="boton boton-primario"
+          [disabled]="operacionEnCurso || !nuevoEstado || nuevoEstado === incidente.estado || !observacionEstado.trim()"
+        >
+          {{
+            guardandoEstado()
+              ? 'Actualizando...'
+              : 'Actualizar estado'
+          }}
+        </button>
+
+      </form>
+
+    </div>
+
+    <!-- HISTORIAL -->
+
+    <section class="historial" aria-label="Historial de estados del incidente">
+
+      <div class="titulo-seccion">
+        <h3>Historial de estados</h3>
+
+        <button
+          type="button"
+          class="boton boton-secundario"
+          (click)="cargarHistorial(incidente.id)"
+          [disabled]="cargandoHistorial()"
+        >
+          ↻ Actualizar historial
+        </button>
+      </div>
+
+      <div
+        *ngIf="cargandoHistorial()"
+        class="estado-vacio"
+      >
+        Consultando historial...
+      </div>
+
+      <div
+        *ngIf="errorHistorial()"
+        class="mensaje error"
+        role="alert"
+      >
+        {{ errorHistorial() }}
+      </div>
+
+      <div
+        *ngIf="!cargandoHistorial() && !errorHistorial() && historial().length === 0"
+        class="estado-vacio"
+      >
+        Todavía no hay cambios de estado registrados.
+      </div>
+
+      <div
+        *ngFor="let evento of historial()"
+        class="evento"
+      >
+
+        <div class="evento-punto"></div>
+
+        <div class="evento-contenido">
+
+          <strong>
+            {{ etiquetaEstado(evento.estadoAnterior) }}
+            →
+            {{ etiquetaEstado(evento.estadoNuevo) }}
+          </strong>
+
+          <p>{{ evento.observacion }}</p>
+
+          <small>
+            {{ evento.fechaCambio | date:'dd/MM/yyyy HH:mm' }}
+            · Responsable: {{ evento.responsable }}
+          </small>
+
+        </div>
+
+      </div>
+      
+    </section>
+
+  </section>
+
+</div>

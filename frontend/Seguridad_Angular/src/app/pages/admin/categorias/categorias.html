@@ -1,0 +1,299 @@
+
+<div class="pagina-categorias">
+
+  <!-- ===================================== -->
+  <!-- 1. ENCABEZADO -->
+  <!-- ===================================== -->
+
+  <header class="encabezado">
+    <div>
+      <span class="etiqueta">ADMINISTRACIÓN</span>
+      <h1>Gestión de categorías</h1>
+      <p>
+        Consulta las categorías de incidentes y registra
+        nuevas categorías con su agencia responsable.
+      </p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-volver">
+      ← Volver al panel
+    </a>
+  </header>
+
+  <!-- ===================================== -->
+  <!-- 2. RESUMEN -->
+  <!-- ===================================== -->
+
+  <section class="resumen">
+
+    <article class="resumen-tarjeta">
+      <span>Categorías registradas</span>
+      <strong>{{ totalCategorias() }}</strong>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>Agencias disponibles</span>
+      <strong>{{ totalAgencias() }}</strong>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>Resultados visibles</span>
+      <strong>{{ categoriasFiltradas().length }}</strong>
+    </article>
+
+  </section>
+
+  <!-- ===================================== -->
+  <!-- 3. MENSAJES -->
+  <!-- ===================================== -->
+
+  <div *ngIf="error()" class="mensaje-error" role="alert">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="mensaje()" class="mensaje-exito" role="status">
+    {{ mensaje() }}
+  </div>
+
+  <!-- ===================================== -->
+  <!-- 4. REGISTRO DE CATEGORÍAS -->
+  <!-- ===================================== -->
+
+  <section class="panel">
+
+    <div class="panel-encabezado">
+      <div>
+        <h2>Registrar nueva categoría</h2>
+        <p>
+          Completa los datos solicitados por el backend.
+        </p>
+      </div>
+    </div>
+
+    <form
+      class="formulario"
+      (ngSubmit)="guardarCategoria()"
+    >
+
+      <div class="campo">
+        <label for="nombreCategoria">
+          Nombre de la categoría
+        </label>
+
+        <input
+          id="nombreCategoria"
+          name="nombreCategoria"
+          type="text"
+          [(ngModel)]="nombre"
+          maxlength="80"
+          placeholder="Ejemplo: Accidente de tránsito"
+          required
+        />
+
+        <small>Máximo 80 caracteres.</small>
+      </div>
+
+      <div class="campo">
+        <label for="prioridadCategoria">
+          Nivel de prioridad
+        </label>
+
+        <select
+          id="prioridadCategoria"
+          name="prioridadCategoria"
+          [(ngModel)]="nivelPrioridad"
+          required
+        >
+          <option value="" disabled>
+            Selecciona una prioridad
+          </option>
+
+          <option
+            *ngFor="let prioridad of prioridades()"
+            [value]="prioridad"
+          >
+            {{ prioridad }}
+          </option>
+        </select>
+
+        <small>
+          Las prioridades se obtienen de las categorías
+          existentes hasta confirmar el enum Java.
+        </small>
+
+        <small *ngIf="!cargando() && prioridades().length === 0">
+          No hay prioridades disponibles. Necesitamos
+          los valores de NivelPrioridad.java.
+        </small>
+      </div>
+
+      <div class="campo">
+        <label for="agenciaCategoria">
+          Agencia responsable
+        </label>
+
+        <select
+          id="agenciaCategoria"
+          name="agenciaCategoria"
+          [(ngModel)]="agenciaId"
+          required
+        >
+          <option [ngValue]="null">
+            Selecciona una agencia
+          </option>
+
+          <option
+            *ngFor="let agencia of agencias()"
+            [ngValue]="agencia.id"
+          >
+            {{ agencia.nombre }}
+            ({{ agencia.siglas }})
+          </option>
+        </select>
+
+        <small>
+          Esta agencia quedará asociada a la categoría.
+        </small>
+      </div>
+
+      <div class="campo campo-boton">
+        <button
+          type="submit"
+          class="boton-principal"
+          [disabled]="
+            guardando() ||
+            cargando() ||
+            prioridades().length === 0 ||
+            agencias().length === 0
+          "
+        >
+          {{
+            guardando()
+              ? 'Guardando...'
+              : 'Registrar categoría'
+          }}
+        </button>
+      </div>
+
+    </form>
+
+  </section>
+
+  <!-- ===================================== -->
+  <!-- 5. FILTROS -->
+  <!-- ===================================== -->
+
+  <section class="panel">
+
+    <div class="panel-encabezado">
+      <div>
+        <h2>Categorías registradas</h2>
+        <p>
+          Busca por nombre, prioridad o agencia responsable.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="boton-secundario"
+        (click)="cargarDatos()"
+        [disabled]="cargando()"
+      >
+        ↻ Actualizar
+      </button>
+    </div>
+
+    <div class="filtros">
+
+      <input
+        type="search"
+        placeholder="Buscar categoría o agencia..."
+        [value]="busqueda()"
+        (input)="cambiarBusqueda($any($event.target).value)"
+      />
+
+      <select
+        [value]="filtroPrioridad()"
+        (change)="cambiarFiltroPrioridad($any($event.target).value)"
+      >
+        <option value="TODAS">
+          Todas las prioridades
+        </option>
+
+        <option
+          *ngFor="let prioridad of prioridades()"
+          [value]="prioridad"
+        >
+          {{ prioridad }}
+        </option>
+      </select>
+
+      <button
+        type="button"
+        class="boton-secundario"
+        (click)="limpiarFiltros()"
+      >
+        Limpiar filtros
+      </button>
+
+    </div>
+
+    <!-- ================================= -->
+    <!-- 6. TABLA -->
+    <!-- ================================= -->
+
+    <div *ngIf="cargando()" class="estado-vacio">
+      Cargando categorías y agencias...
+    </div>
+
+    <div *ngIf="!cargando()" class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Categoría</th>
+            <th>Prioridad</th>
+            <th>Agencia responsable</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="let categoria of categoriasFiltradas()"
+          >
+            <td>#{{ categoria.id }}</td>
+
+            <td>
+              <strong>{{ categoria.nombre }}</strong>
+            </td>
+
+            <td>
+              <span class="etiqueta-prioridad">
+                {{ categoria.nivelPrioridad }}
+              </span>
+            </td>
+
+            <td>
+              {{ nombreAgencia(categoria) }}
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <div
+        *ngIf="categoriasFiltradas().length === 0"
+        class="estado-vacio"
+      >
+        No se encontraron categorías.
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

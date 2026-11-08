@@ -1,0 +1,224 @@
+
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.pagina {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px 16px;
+  background:
+    radial-gradient(circle at top left, #dbeafe, transparent 40%),
+    linear-gradient(135deg, #f8fafc, #edf3ff);
+}
+
+.tarjeta {
+  width: 100%;
+  max-width: 580px;
+  padding: 40px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 20px 55px rgba(15, 23, 42, 0.08);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 35px;
+  color: #173d83;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.marca-icono {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: #2563eb;
+  color: white;
+  font-size: 24px;
+}
+
+.encabezado {
+  margin-bottom: 28px;
+}
+
+.etiqueta {
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+
+.encabezado h1,
+.exito h1 {
+  margin: 12px 0;
+  color: #102a57;
+  font-size: 32px;
+  letter-spacing: -0.8px;
+}
+
+.encabezado p,
+.exito p {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.campo {
+  margin-bottom: 22px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 9px;
+  color: #26364d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.campo input,
+.campo textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #10213e;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.campo textarea {
+  min-height: 145px;
+  resize: vertical;
+}
+
+.campo input:focus-visible,
+.campo textarea:focus-visible {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.campo [aria-invalid="true"] {
+  border-color: #dc2626;
+}
+
+.campo small {
+  display: block;
+  margin-top: 8px;
+  color: #b91c1c;
+  font-size: 12px;
+}
+
+.campo-pie {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.campo-pie small {
+  color: #64748b;
+}
+
+.campo-pie span {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.boton {
+  width: 100%;
+  min-height: 52px;
+  border: none;
+  border-radius: 10px;
+  background: #1d4ed8;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.boton:hover:not(:disabled) {
+  background: #1e40af;
+}
+
+.boton:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.boton:focus-visible,
+.volver:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+.alerta {
+  margin-bottom: 20px;
+  padding: 14px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.exito {
+  padding: 30px 0;
+  text-align: center;
+}
+
+.exito-icono {
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 35px;
+}
+
+.volver {
+  display: block;
+  margin-top: 27px;
+  color: #475569;
+  text-align: center;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.pie {
+  margin-top: 30px;
+  color: #94a3b8;
+  text-align: center;
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .tarjeta {
+    padding: 28px 20px;
+  }
+
+  .encabezado h1,
+  .exito h1 {
+    font-size: 27px;
+  }
+}

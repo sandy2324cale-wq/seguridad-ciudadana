@@ -1,0 +1,416 @@
+
+<div class="pagina-usuarios">
+
+  <!-- ======================================
+       1. ENCABEZADO
+       ====================================== -->
+
+  <header class="encabezado">
+    <div>
+      <span class="etiqueta">ADMINISTRACIÓN DE CUENTAS</span>
+      <h1>Gestión de usuarios</h1>
+      <p>
+        Administra las cuentas registradas y
+        controla sus permisos de acceso.
+      </p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-volver">
+      ← Volver al panel
+    </a>
+  </header>
+
+  <!-- ======================================
+       2. RESUMEN DE CUENTAS
+       ====================================== -->
+
+  <section class="resumen">
+    <article class="resumen-tarjeta">
+      <span>Total de usuarios</span>
+      <strong>{{ totalUsuarios() }}</strong>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>Pendientes</span>
+      <strong>{{ totalPendientes() }}</strong>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>Validados</span>
+      <strong>{{ totalValidados() }}</strong>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>Bloqueados</span>
+      <strong>{{ totalBloqueados() }}</strong>
+    </article>
+  </section>
+
+  <!-- ======================================
+       3. MENSAJES
+       ====================================== -->
+
+  <div
+    *ngIf="error()"
+    class="mensaje-error"
+    role="alert"
+  >
+    {{ error() }}
+  </div>
+
+  <div
+    *ngIf="mensaje()"
+    class="mensaje-exito"
+    role="status"
+  >
+    {{ mensaje() }}
+  </div>
+
+  <!-- ======================================
+       4. DISTRIBUCIÓN PRINCIPAL
+       ====================================== -->
+
+  <div
+    class="contenido-usuarios"
+    [class.con-detalle]="seleccionado() !== null"
+  >
+
+    <!-- ====================================
+         5. LISTADO Y FILTROS
+         ==================================== -->
+
+    <section class="panel-listado">
+
+      <div class="panel-titulo">
+        <div>
+          <h2>Usuarios registrados</h2>
+          <p>
+            {{ usuariosFiltrados().length }}
+            resultados encontrados
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="boton-secundario"
+          (click)="cargarUsuarios()"
+          [disabled]="cargando()"
+        >
+          ↻ Actualizar
+        </button>
+      </div>
+
+      <div class="filtros">
+
+        <input
+          type="search"
+          placeholder="Buscar nombre, cédula o correo..."
+          [value]="busqueda()"
+          (input)="cambiarBusqueda($any($event.target).value)"
+        />
+
+        <select
+          [value]="filtroRol()"
+          (change)="cambiarFiltroRol($any($event.target).value)"
+        >
+          <option value="TODOS">Todos los roles</option>
+
+          <option
+            *ngFor="let rol of roles"
+            [value]="rol"
+          >
+            {{ nombreRol(rol) }}
+          </option>
+        </select>
+
+        <select
+          [value]="filtroEstado()"
+          (change)="cambiarFiltroEstado($any($event.target).value)"
+        >
+          <option value="TODOS">Todos los estados</option>
+
+          <option
+            *ngFor="let estado of estados"
+            [value]="estado"
+          >
+            {{ nombreEstado(estado) }}
+          </option>
+        </select>
+
+        <button
+          type="button"
+          class="boton-secundario"
+          (click)="limpiarFiltros()"
+        >
+          Limpiar
+        </button>
+
+      </div>
+
+      <div *ngIf="cargando()" class="estado-vacio">
+        Cargando usuarios...
+      </div>
+
+      <!-- Tabla compacta para que no se sature -->
+
+      <div
+        *ngIf="!cargando()"
+        class="tabla-contenedor"
+      >
+        <table>
+
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr
+              *ngFor="let usuario of usuariosFiltrados()"
+              [class.fila-seleccionada]="
+                seleccionado()?.id === usuario.id
+              "
+            >
+
+              <td>
+                <div class="usuario-celda">
+                  <span class="avatar">
+                    {{ usuario.nombre.charAt(0).toUpperCase() }}
+                  </span>
+
+                  <div class="usuario-datos">
+                    <strong>
+                      {{ usuario.nombre }}
+                      {{ usuario.apellido }}
+                    </strong>
+
+                    <small>{{ usuario.email }}</small>
+                    <small>CI: {{ usuario.cedula }}</small>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="etiqueta-rol">
+                  {{ nombreRol(usuario.rol) }}
+                </span>
+              </td>
+
+              <td>
+                <span
+                  class="etiqueta-estado"
+                  [ngClass]="claseEstado(usuario.estado)"
+                >
+                  {{ nombreEstado(usuario.estado) }}
+                </span>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="boton-gestionar"
+                  (click)="seleccionarUsuario(usuario)"
+                >
+                  Gestionar
+                </button>
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+        <div
+          *ngIf="usuariosFiltrados().length === 0"
+          class="estado-vacio"
+        >
+          No se encontraron usuarios.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ====================================
+         6. PANEL LATERAL DE GESTIÓN
+         ==================================== -->
+
+    <aside
+      *ngIf="seleccionado() as usuario"
+      class="panel-detalle"
+      aria-label="Gestión de usuario seleccionado"
+    >
+
+      <div class="detalle-encabezado">
+
+        <div>
+          <span class="etiqueta">CUENTA SELECCIONADA</span>
+          <h2>Administrar usuario</h2>
+        </div>
+
+        <button
+          type="button"
+          class="boton-cerrar"
+          (click)="cerrarDetalle()"
+          aria-label="Cerrar detalle"
+        >
+          ✕
+        </button>
+
+      </div>
+
+      <!-- Identidad del usuario -->
+
+      <div class="perfil">
+        <div class="avatar avatar-grande">
+          {{ usuario.nombre.charAt(0).toUpperCase() }}
+        </div>
+
+        <h3>
+          {{ usuario.nombre }}
+          {{ usuario.apellido }}
+        </h3>
+
+        <p>{{ usuario.email }}</p>
+      </div>
+
+      <div class="datos-usuario">
+
+        <div>
+          <span>Identificador</span>
+          <strong>#{{ usuario.id }}</strong>
+        </div>
+
+        <div>
+          <span>Cédula</span>
+          <strong>{{ usuario.cedula }}</strong>
+        </div>
+
+        <div>
+          <span>Rol actual</span>
+          <strong>{{ nombreRol(usuario.rol) }}</strong>
+        </div>
+
+        <div>
+          <span>Estado actual</span>
+          <strong>{{ nombreEstado(usuario.estado) }}</strong>
+        </div>
+
+      </div>
+
+      <!-- ==================================
+           7. CAMBIO DE ESTADO
+           ADMIN Y SUPER_ADMIN
+           ================================== -->
+
+      <form
+        class="formulario"
+        (ngSubmit)="guardarEstado()"
+      >
+
+        <h3>Cambiar estado de cuenta</h3>
+
+        <p>
+          Selecciona el nuevo estado e indica
+          el motivo administrativo.
+        </p>
+
+        <label for="nuevoEstado">Nuevo estado</label>
+
+        <select
+          id="nuevoEstado"
+          name="nuevoEstado"
+          [(ngModel)]="nuevoEstado"
+          required
+        >
+          <option
+            *ngFor="let estado of estados"
+            [value]="estado"
+          >
+            {{ nombreEstado(estado) }}
+          </option>
+        </select>
+
+        <label for="motivo">Motivo del cambio</label>
+
+        <textarea
+          id="motivo"
+          name="motivo"
+          [(ngModel)]="motivo"
+          rows="3"
+          placeholder="Describe el motivo..."
+          required
+        ></textarea>
+
+        <button
+          type="submit"
+          class="boton-principal"
+          [disabled]="guardandoEstado() || guardandoRol()"
+        >
+          {{
+            guardandoEstado()
+              ? 'Guardando...'
+              : 'Guardar estado'
+          }}
+        </button>
+
+      </form>
+
+      <!-- ==================================
+           8. CAMBIO DE ROL
+           SOLO SUPER_ADMIN
+           ================================== -->
+
+      <form
+        *ngIf="esSuperAdmin"
+        class="formulario formulario-rol"
+        (ngSubmit)="guardarRol()"
+      >
+
+        <h3>Cambiar rol de acceso</h3>
+
+        <p>
+          Esta operación está reservada
+          para SUPER_ADMIN.
+        </p>
+
+        <label for="nuevoRol">Nuevo rol</label>
+
+        <select
+          id="nuevoRol"
+          name="nuevoRol"
+          [(ngModel)]="nuevoRol"
+          required
+        >
+          <option
+            *ngFor="let rol of roles"
+            [ngValue]="rol"
+          >
+            {{ nombreRol(rol) }}
+          </option>
+        </select>
+
+        <button
+          type="submit"
+          class="boton-principal"
+          [disabled]="guardandoRol() || guardandoEstado()"
+        >
+          {{
+            guardandoRol()
+              ? 'Guardando...'
+              : 'Guardar rol'
+          }}
+        </button>
+
+      </form>
+
+    </aside>
+
+  </div>
+
+</div>

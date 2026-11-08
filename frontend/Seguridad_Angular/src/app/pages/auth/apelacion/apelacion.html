@@ -1,0 +1,140 @@
+
+<div class="pagina">
+  <main class="tarjeta">
+
+    <div class="marca">
+      <span class="marca-icono" aria-hidden="true">◆</span>
+      <span>SEGURIDAD CIUDADANA</span>
+    </div>
+
+    <ng-container *ngIf="!enviada(); else exito">
+
+      <div class="encabezado">
+        <span class="etiqueta">SOPORTE DE CUENTAS</span>
+        <h1>Apelar cuenta bloqueada</h1>
+        <p>
+          Si tu cuenta fue bloqueada, puedes solicitar
+          una revisión. Completa el formulario con
+          los datos asociados a tu cuenta.
+        </p>
+      </div>
+
+      <div *ngIf="error()" class="alerta" role="alert">
+        {{ error() }}
+      </div>
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="enviar()"
+        novalidate
+      >
+
+        <div class="campo">
+          <label for="email">Correo electrónico</label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="correo@ejemplo.com"
+            [attr.aria-invalid]="email.touched && email.invalid"
+          />
+
+          <small *ngIf="email.touched && email.invalid">
+            Ingresa un correo electrónico válido.
+          </small>
+        </div>
+
+        <div class="campo">
+          <label for="cedula">Número de cédula</label>
+
+          <input
+            id="cedula"
+            type="text"
+            formControlName="cedula"
+            inputmode="numeric"
+            maxlength="10"
+            placeholder="10 dígitos"
+            [attr.aria-invalid]="cedula.touched && cedula.invalid"
+          />
+
+          <small *ngIf="cedula.touched && cedula.invalid">
+            Ingresa una cédula de 10 dígitos.
+          </small>
+        </div>
+
+        <div class="campo">
+          <label for="motivo">Motivo de la apelación</label>
+
+          <textarea
+            id="motivo"
+            formControlName="motivoApelacion"
+            rows="6"
+            maxlength="2000"
+            placeholder="Explica por qué solicitas la revisión de tu cuenta..."
+            [attr.aria-invalid]="motivo.touched && motivo.invalid"
+          ></textarea>
+
+          <div class="campo-pie">
+            <small>
+              Mínimo 10 y máximo 2000 caracteres.
+            </small>
+
+            <span>
+              {{ motivo.value.length }}/2000
+            </span>
+          </div>
+
+          <small *ngIf="motivo.touched && motivo.invalid">
+            El motivo debe contener entre 10 y 2000 caracteres.
+          </small>
+        </div>
+
+        <button
+          class="boton"
+          type="submit"
+          [disabled]="cargando()"
+        >
+          {{ cargando() ? 'Enviando solicitud...' : 'Enviar apelación' }}
+        </button>
+
+      </form>
+
+    </ng-container>
+
+    <ng-template #exito>
+        
+<p *ngIf="numeroSolicitud() !== null">
+  <strong>
+    Número de solicitud: #{{ numeroSolicitud() }}
+  </strong>
+</p>
+
+<p>
+  Estado: Pendiente de revisión
+</p>
+
+      <div class="exito">
+        <div class="exito-icono" aria-hidden="true">✓</div>
+
+        <h1>Solicitud recibida</h1>
+
+        <p>
+          Tu apelación fue registrada correctamente.
+          Un administrador podrá revisarla desde
+          el sistema.
+        </p>
+      </div>
+    </ng-template>
+
+    <a routerLink="/login" class="volver">
+      ← Volver al inicio de sesión
+    </a>
+
+    <p class="pie">
+      Sistema de Seguridad Ciudadana · Soporte
+    </p>
+
+  </main>
+</div>

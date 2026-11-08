@@ -1,0 +1,342 @@
+
+<div class="pagina-apelaciones">
+
+  <!-- ======================================
+       1. ENCABEZADO
+       ====================================== -->
+
+  <header class="encabezado">
+    <div>
+      <span class="etiqueta">ADMINISTRACIÓN</span>
+      <h1>Gestión de apelaciones</h1>
+      <p>
+        Revisa solicitudes de cuentas bloqueadas
+        y registra las decisiones correspondientes.
+      </p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-volver">
+      ← Volver al panel
+    </a>
+  </header>
+
+  <!-- ======================================
+       2. TARJETAS RESUMEN
+       ====================================== -->
+
+  <section class="resumen">
+    <article class="tarjeta">
+      <span>Total</span>
+      <strong>{{ totalSolicitudes() }}</strong>
+    </article>
+
+    <article class="tarjeta">
+      <span>Pendientes</span>
+      <strong>{{ totalPendientes() }}</strong>
+    </article>
+
+    <article class="tarjeta">
+      <span>Aprobadas</span>
+      <strong>{{ totalAprobadas() }}</strong>
+    </article>
+
+    <article class="tarjeta">
+      <span>Rechazadas</span>
+      <strong>{{ totalRechazadas() }}</strong>
+    </article>
+  </section>
+
+  <!-- ======================================
+       3. MENSAJES
+       ====================================== -->
+
+  <div *ngIf="error()" class="mensaje-error" role="alert">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="mensaje()" class="mensaje-exito" role="status">
+    {{ mensaje() }}
+  </div>
+
+  <!-- ======================================
+       4. LISTADO Y PANEL DE DETALLE
+       ====================================== -->
+
+  <div
+    class="contenido"
+    [class.con-detalle]="seleccionado() !== null"
+  >
+
+    <!-- LISTADO -->
+
+    <section class="panel">
+      <div class="panel-encabezado">
+        <div>
+          <h2>Solicitudes recibidas</h2>
+          <p>
+            {{ solicitudesFiltradas().length }}
+            resultados encontrados
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="boton-secundario"
+          (click)="cargarSolicitudes()"
+          [disabled]="cargando() || guardando()"
+        >
+          ↻ Actualizar
+        </button>
+      </div>
+
+      <!-- FILTROS -->
+
+      <div class="filtros">
+        <input
+          type="search"
+          aria-label="Buscar apelaciones"
+          placeholder="Buscar correo, cédula o motivo..."
+          [value]="busqueda()"
+          (input)="cambiarBusqueda($any($event.target).value)"
+        />
+
+        <select
+          aria-label="Filtrar por estado"
+          [value]="filtroEstado()"
+          (change)="cambiarFiltroEstado($any($event.target).value)"
+        >
+          <option value="TODOS">Todos los estados</option>
+          <option value="PENDIENTE">Pendientes</option>
+          <option value="APROBADA">Aprobadas</option>
+          <option value="RECHAZADA">Rechazadas</option>
+        </select>
+
+        <button
+          type="button"
+          class="boton-secundario"
+          (click)="limpiarFiltros()"
+        >
+          Limpiar
+        </button>
+      </div>
+
+      <!-- ESTADO DE CARGA -->
+
+      <div *ngIf="cargando()" class="estado-vacio">
+        Cargando apelaciones...
+      </div>
+
+      <!-- TABLA -->
+
+      <div
+        *ngIf="!cargando()"
+        class="tabla-contenedor"
+      >
+        <table>
+          <thead>
+            <tr>
+              <th>Solicitante</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              *ngFor="let solicitud of solicitudesFiltradas()"
+              [class.fila-seleccionada]="
+                seleccionado()?.id === solicitud.id
+              "
+            >
+              <td>
+                <div class="solicitante">
+                  <strong>{{ solicitud.email }}</strong>
+                  <small>CI: {{ solicitud.cedula }}</small>
+                  <small>Solicitud #{{ solicitud.id }}</small>
+                </div>
+              </td>
+
+              <td>
+                {{ formatearFecha(solicitud.fechaSolicitud) }}
+              </td>
+
+              <td>
+                <span
+                  class="estado"
+                  [ngClass]="claseEstado(solicitud.estadoSolicitud)"
+                >
+                  {{ nombreEstado(solicitud.estadoSolicitud) }}
+                </span>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="boton-gestionar"
+                  (click)="seleccionarSolicitud(solicitud)"
+                  [disabled]="guardando()"
+                >
+                  Revisar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div
+          *ngIf="solicitudesFiltradas().length === 0"
+          class="estado-vacio"
+        >
+          No se encontraron apelaciones.
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================
+         5. DETALLE DE LA APELACIÓN
+         ==================================== -->
+
+    <aside
+      *ngIf="seleccionado() as solicitud"
+      class="panel panel-detalle"
+    >
+      <div class="detalle-encabezado">
+        <div>
+          <span class="etiqueta">REVISIÓN</span>
+          <h2>Solicitud #{{ solicitud.id }}</h2>
+        </div>
+
+        <button
+          type="button"
+          class="boton-cerrar"
+          aria-label="Cerrar detalle"
+          (click)="cerrarDetalle()"
+          [disabled]="guardando()"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- DATOS -->
+
+      <div class="detalle-datos">
+        <div>
+          <span>Correo electrónico</span>
+          <strong>{{ solicitud.email }}</strong>
+        </div>
+
+        <div>
+          <span>Cédula</span>
+          <strong>{{ solicitud.cedula }}</strong>
+        </div>
+
+        <div>
+          <span>Fecha</span>
+          <strong>
+            {{ formatearFecha(solicitud.fechaSolicitud) }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Estado</span>
+          <span
+            class="estado"
+            [ngClass]="claseEstado(solicitud.estadoSolicitud)"
+          >
+            {{ nombreEstado(solicitud.estadoSolicitud) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- MOTIVO -->
+
+      <div class="motivo">
+        <h3>Motivo de la apelación</h3>
+        <p>{{ solicitud.motivoApelacion }}</p>
+      </div>
+
+      <!-- ==================================
+           6. DECISIÓN
+           ================================== -->
+
+      <div
+        *ngIf="solicitud.estadoSolicitud === 'PENDIENTE'"
+        class="acciones"
+      >
+        <h3>Resolver apelación</h3>
+        <p>
+          Aprobar valida la cuenta bloqueada.
+          Rechazar mantiene su estado actual.
+        </p>
+
+        <button
+          type="button"
+          class="boton-aprobar"
+          [disabled]="guardando()"
+          (click)="solicitarDecision('APROBADA')"
+        >
+          Aprobar apelación
+        </button>
+
+        <button
+          type="button"
+          class="boton-rechazar"
+          [disabled]="guardando()"
+          (click)="solicitarDecision('RECHAZADA')"
+        >
+          Rechazar apelación
+        </button>
+      </div>
+
+      <div
+        *ngIf="solicitud.estadoSolicitud !== 'PENDIENTE'"
+        class="aviso-resuelta"
+      >
+        Esta apelación ya fue resuelta.
+        No se puede modificar su decisión.
+      </div>
+
+      <!-- ==================================
+           7. CONFIRMACIÓN
+           ================================== -->
+
+      <div
+        *ngIf="decisionPendiente()"
+        class="confirmacion"
+        role="group"
+        aria-label="Confirmar decisión administrativa"
+      >
+        <h3>Confirmar decisión</h3>
+        <p>{{ confirmacion() }}</p>
+
+        <div class="confirmacion-botones">
+          <button
+            type="button"
+            class="boton-secundario"
+            (click)="cancelarDecision()"
+            [disabled]="guardando()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="button"
+            class="boton-confirmar"
+            (click)="confirmarDecision()"
+            [disabled]="guardando()"
+          >
+            {{
+              guardando()
+                ? 'Procesando...'
+                : 'Confirmar'
+            }}
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>

@@ -1,0 +1,150 @@
+<!-- Enlace de salto visible cuando recibe foco con el teclado. -->
+<a *ngIf="mostrarLayout()" class="saltar-contenido" href="#contenido-principal">Saltar al contenido</a>
+
+<!-- Sidebar único y persistente entre rutas privadas. -->
+<app-sidebar
+  *ngIf="mostrarLayout()"
+  [rol]="rol"
+  [abierto]="menuAbierto()"
+  (cerrarMenu)="menuAbierto.set(false)"
+  (salir)="cerrarSesion()"
+></app-sidebar>
+
+<button
+  *ngIf="mostrarLayout() && menuAbierto()"
+  type="button"
+  class="fondo-menu"
+  aria-label="Cerrar menú de navegación"
+  (click)="menuAbierto.set(false)"
+></button>
+
+<div class="estructura-contenido" [class.privada]="mostrarLayout()">
+  <header *ngIf="mostrarLayout()" class="barra-superior">
+    <div class="barra-izquierda">
+      <button
+        type="button"
+        class="boton-menu"
+        aria-label="Alternar menú de navegación"
+        [attr.aria-expanded]="menuAbierto()"
+        (click)="menuAbierto.update(v => !v)"
+      >☰</button>
+      <div class="titulo-sistema">
+        <strong>{{ tituloRol }}</strong>
+        <span>Sistema de Seguridad Ciudadana</span>
+      </div>
+    </div>
+
+    <!-- Menú de cuenta accesible desde cualquier página autenticada. -->
+    <div class="barra-derecha">
+      <div class="usuario-actual">
+        <strong [title]="email">{{ email }}</strong>
+        <span>{{ rol }}</span>
+      </div>
+      <div class="contenedor-perfil">
+        <button
+          type="button"
+          class="boton-perfil"
+          aria-label="Abrir menú de mi cuenta"
+          aria-haspopup="true"
+          [attr.aria-expanded]="menuPerfilAbierto()"
+          aria-controls="menu-cuenta"
+          (click)="menuPerfilAbierto.update(v => !v)"
+        >
+          <span class="avatar" aria-hidden="true">{{ inicialUsuario }}</span>
+          <span class="texto-perfil">Mi cuenta</span>
+          <span aria-hidden="true">▾</span>
+        </button>
+        <div *ngIf="menuPerfilAbierto()" id="menu-cuenta" class="desplegable-perfil">
+          <div class="desplegable-encabezado">
+            <strong>{{ email }}</strong>
+            <span>{{ rol }}</span>
+          </div>
+          <button type="button" (click)="abrirPanelPerfil()">⚙ Mi perfil y preferencias</button>
+          <button type="button" class="opcion-salir" (click)="cerrarSesion()">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Un único outlet para todas las páginas, como en tu implementación actual. -->
+  <main id="contenido-principal" class="contenido-principal" tabindex="-1">
+    <router-outlet />
+  </main>
+</div>
+
+<!-- Panel lateral de perfil y preferencias. -->
+<ng-container *ngIf="mostrarLayout() && panelPerfilAbierto()">
+  <button type="button" class="fondo-preferencias" aria-label="Cerrar preferencias" (click)="cerrarPanelPerfil()"></button>
+  <section class="panel-preferencias" role="dialog" aria-modal="true" aria-labelledby="titulo-preferencias">
+    <div class="panel-cabecera">
+      <div>
+        <span class="sobre-titulo">MI ESPACIO</span>
+        <h2 id="titulo-preferencias">Perfil y preferencias</h2>
+      </div>
+      <button type="button" class="boton-cerrar" aria-label="Cerrar panel de preferencias" (click)="cerrarPanelPerfil()">✕</button>
+    </div>
+
+    <div class="panel-cuerpo">
+      <section class="bloque-preferencia" aria-labelledby="titulo-cuenta">
+        <h3 id="titulo-cuenta">Mi cuenta</h3>
+        <div class="dato-cuenta"><span>Correo electrónico</span><strong>{{ email }}</strong></div>
+        <div class="dato-cuenta"><span>Rol asignado</span><strong>{{ rol }}</strong></div>
+        <p class="nota">Por seguridad, el rol se administra desde los permisos del sistema.</p>
+      </section>
+
+      <section class="bloque-preferencia" aria-labelledby="titulo-apariencia">
+        <h3 id="titulo-apariencia">Apariencia</h3>
+        <p>Selecciona cómo quieres ver la plataforma.</p>
+        <div class="grupo-opciones" role="group" aria-label="Tema de la aplicación">
+          <button type="button" [class.seleccionado]="preferencias().tema === 'claro'" [attr.aria-pressed]="preferencias().tema === 'claro'" (click)="cambiarTema('claro')">☀ Claro</button>
+          <button type="button" [class.seleccionado]="preferencias().tema === 'oscuro'" [attr.aria-pressed]="preferencias().tema === 'oscuro'" (click)="cambiarTema('oscuro')">☾ Oscuro</button>
+          <button type="button" [class.seleccionado]="preferencias().tema === 'sistema'" [attr.aria-pressed]="preferencias().tema === 'sistema'" (click)="cambiarTema('sistema')">▣ Sistema</button>
+        </div>
+      </section>
+
+      <section class="bloque-preferencia" aria-labelledby="titulo-lectura">
+        <h3 id="titulo-lectura">Tamaño de letra</h3>
+        <p>Facilita la lectura de los reportes y las alertas.</p>
+        <div class="grupo-opciones" role="group" aria-label="Tamaño de letra">
+          <button type="button" [class.seleccionado]="preferencias().letra === 'normal'" [attr.aria-pressed]="preferencias().letra === 'normal'" (click)="cambiarLetra('normal')">Normal</button>
+          <button type="button" [class.seleccionado]="preferencias().letra === 'grande'" [attr.aria-pressed]="preferencias().letra === 'grande'" (click)="cambiarLetra('grande')">Grande</button>
+          <button type="button" [class.seleccionado]="preferencias().letra === 'muy-grande'" [attr.aria-pressed]="preferencias().letra === 'muy-grande'" (click)="cambiarLetra('muy-grande')">Muy grande</button>
+        </div>
+        <div class="vista-previa">Vista previa: las alertas de seguridad deben ser fáciles de leer.</div>
+      </section>
+
+      <section class="bloque-preferencia" aria-labelledby="titulo-accesibilidad">
+        <h3 id="titulo-accesibilidad">Accesibilidad</h3>
+        <label class="opcion-verificacion">
+          <span><strong>Alto contraste</strong><small>Mejora la distinción entre elementos.</small></span>
+          <input type="checkbox" [checked]="preferencias().altoContraste" (change)="cambiarContraste($any($event.target).checked)" />
+        </label>
+        <label class="opcion-verificacion">
+          <span><strong>Reducir animaciones</strong><small>Limita transiciones y efectos visuales.</small></span>
+          <input type="checkbox" [checked]="preferencias().reducirMovimiento" (change)="cambiarMovimiento($any($event.target).checked)" />
+        </label>
+      </section>
+
+      <section
+    class="bloque-preferencia"
+    aria-labelledby="titulo-seguridad"
+  >
+    <h3 id="titulo-seguridad">Seguridad</h3>
+
+    <p>
+      Protege tu cuenta actualizando tu contraseña
+      mediante tu clave actual o un código enviado a Gmail.
+    </p>
+
+    <button
+      type="button"
+      class="boton-cambiar-password"
+      (click)="irACambiarPassword()"
+    >
+      🔐 Cambiar contraseña
+    </button>
+</section>
+      <button type="button" class="boton-restaurar" (click)="restaurarPreferencias()">Restablecer preferencias</button>
+    </div>
+  </section>
+</ng-container>

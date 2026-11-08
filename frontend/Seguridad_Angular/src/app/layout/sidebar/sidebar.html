@@ -1,0 +1,106 @@
+
+<!-- ==========================================
+     1. MENÚ LATERAL
+     ========================================== -->
+
+<aside
+  id="menu-principal"
+  class="sidebar"
+  [class.abierto]="abierto"
+  aria-label="Navegación del sistema"
+>
+
+  <!-- ======================================
+       2. IDENTIDAD DEL SISTEMA
+       ====================================== -->
+
+  <div class="marca">
+
+    <div class="marca-icono" aria-hidden="true">
+      ◆
+    </div>
+
+    <div class="marca-texto">
+      <strong>SEGURIDAD</strong>
+      <span>CIUDADANA</span>
+    </div>
+
+    <!-- Cerrar únicamente en móviles -->
+
+    <button
+      type="button"
+      class="cerrar-movil"
+      (click)="cerrarMenu.emit()"
+      aria-label="Cerrar menú de navegación"
+    >
+      ✕
+    </button>
+
+  </div>
+
+  <div class="separador" aria-hidden="true"></div>
+
+  <!-- ======================================
+       3. NAVEGACIÓN POR ROL
+       ====================================== -->
+
+  <div class="seccion-titulo">
+    NAVEGACIÓN PRINCIPAL
+  </div>
+
+  <nav aria-label="Menú principal">
+
+    <div class="navegacion">
+
+      <a
+        *ngFor="let opcion of opcionesVisibles"
+        [routerLink]="opcion.ruta"
+        routerLinkActive="activo"
+        [routerLinkActiveOptions]="{ exact: true }"
+        #estadoRuta="routerLinkActive"
+        [attr.aria-current]="
+          estadoRuta.isActive ? 'page' : null
+        "
+        (click)="cerrarMenu.emit()"
+        class="enlace"
+      >
+        <span
+          class="enlace-icono"
+          aria-hidden="true"
+        >
+          {{ opcion.icono }}
+        </span>
+
+        <span>{{ opcion.titulo }}</span>
+      </a>
+
+    </div>
+
+  </nav>
+
+  <!-- ======================================
+       4. USUARIO Y CIERRE DE SESIÓN
+       ====================================== -->
+
+  <div class="sidebar-inferior">
+
+    <div class="rol-usuario">
+      <span class="rol-etiqueta">
+        ROL ACTUAL
+      </span>
+
+      <strong>{{ rol || 'SIN ROL' }}</strong>
+    </div>
+
+    <button
+      type="button"
+      class="cerrar-sesion"
+      (click)="salir.emit()"
+    >
+      <span aria-hidden="true">↪</span>
+      Cerrar sesión
+    </button>
+
+  </div>
+
+</aside>

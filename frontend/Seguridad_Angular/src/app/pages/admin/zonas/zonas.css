@@ -1,0 +1,626 @@
+
+/* ==========================================
+   1. CONTENEDOR GENERAL
+   ========================================== */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f5f8fc;
+  color: #183153;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.pagina-catalogo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 24px 70px;
+}
+
+/* ==========================================
+   2. ENCABEZADO
+   ========================================== */
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 26px;
+}
+
+.etiqueta {
+  color: #2563eb;
+  font-size: calc(11px * var(--ssc-escala-letra, 1));
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.encabezado h1 {
+  margin: 9px 0;
+  color: #153b70;
+  font-size: calc(29px * var(--ssc-escala-letra, 1));
+}
+
+.encabezado p,
+.panel-encabezado p {
+  color: #64748b;
+  font-size: calc(13px * var(--ssc-escala-letra, 1));
+  line-height: 1.7;
+}
+
+.boton-volver {
+  display: inline-block;
+  padding: 11px 16px;
+  border: 1px solid #d8e4f3;
+  border-radius: 10px;
+  background: white;
+  color: #1d4ed8;
+  font-size: calc(12px * var(--ssc-escala-letra, 1));
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ==========================================
+   3. RESUMEN
+   ========================================== */
+
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.resumen-tarjeta,
+.panel-catalogo {
+  background: white;
+  border: 1px solid #e2eaf5;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(23, 55, 100, 0.035);
+}
+
+.resumen-tarjeta {
+  padding: 22px;
+}
+
+.resumen-tarjeta span {
+  display: block;
+  color: #64748b;
+  font-size: calc(12px * var(--ssc-escala-letra, 1));
+}
+
+.resumen-tarjeta strong {
+  display: block;
+  margin-top: 10px;
+  color: #1d4ed8;
+  font-size: calc(30px * var(--ssc-escala-letra, 1));
+}
+
+/* ==========================================
+   4. PANELES Y FORMULARIOS
+   ========================================== */
+
+.panel-catalogo {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.panel-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.panel-encabezado h2 {
+  margin: 0 0 8px;
+  color: #153b70;
+  font-size: calc(18px * var(--ssc-escala-letra, 1));
+}
+
+.panel-encabezado p {
+  margin: 0;
+}
+
+.formulario {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.campo label {
+  color: #334155;
+  font-size: calc(12px * var(--ssc-escala-letra, 1));
+  font-weight: 700;
+}
+
+input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #d9e3ef;
+  border-radius: 9px;
+  background: white;
+  color: #1e293b;
+  font: inherit;
+  font-size: calc(13px * var(--ssc-escala-letra, 1));
+}
+
+input:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: #2563eb;
+}
+
+/* ==========================================
+   5. BOTONES
+   ========================================== */
+
+button {
+  cursor: pointer;
+  font: inherit;
+}
+
+.boton-principal {
+  min-height: 44px;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 9px;
+  background: #1d4ed8;
+  color: white;
+  font-size: calc(12px * var(--ssc-escala-letra, 1));
+  font-weight: 800;
+}
+
+.boton-secundario {
+  min-height: 44px;
+  padding: 11px 15px;
+  border: 1px solid #d8e4f3;
+  border-radius: 9px;
+  background: #f8fbff;
+  color: #1d4ed8;
+  font-size: calc(12px * var(--ssc-escala-letra, 1));
+  font-weight: 700;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   6. BÚSQUEDA Y TABLA
+   ========================================== */
+
+.filtros {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  padding: 16px;
+  background: #f4f8fe;
+  color: #64748b;
+  font-size: calc(11px * var(--ssc-escala-letra, 1));
+  text-transform: uppercase;
+}
+
+td {
+  padding: 17px 16px;
+  border-top: 1px solid #edf2f8;
+  color: #475569;
+  font-size: calc(12px * var(--ssc-escala-letra, 1));
+}
+
+td strong {
+  color: #1e3a5f;
+}
+
+/* ==========================================
+   7. MENSAJES
+   ========================================== */
+
+.mensaje-error,
+.mensaje-exito {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  font-size: calc(13px * var(--ssc-escala-letra, 1));
+}
+
+.mensaje-error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.mensaje-exito {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.estado-vacio {
+  padding: 35px;
+  text-align: center;
+  color: #64748b;
+  font-size: calc(13px * var(--ssc-escala-letra, 1));
+}
+
+/* ==========================================
+   8. DISEÑO RESPONSIVE
+   ========================================== */
+
+@media (max-width: 750px) {
+  .formulario,
+  .resumen,
+  .filtros {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .pagina-catalogo {
+    padding: 22px 14px 50px;
+  }
+
+  .panel-catalogo {
+    padding: 17px;
+  }
+
+  .encabezado h1 {
+    font-size: calc(24px * var(--ssc-escala-letra, 1));
+  }
+}
+
+
+/* Ajustes del modo oscuro por componente. No afectan el tema claro. */
+:host-context(.ssc-oscuro) { background: var(--ssc-superficie); color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) .etiqueta { color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) .encabezado h1 { color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) .encabezado p, :host-context(.ssc-oscuro) .panel-encabezado p { color: var(--ssc-secundario); }
+:host-context(.ssc-oscuro) .boton-volver { border: 1px solid var(--ssc-borde); background: var(--ssc-superficie); color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) .resumen-tarjeta, :host-context(.ssc-oscuro) .panel-catalogo { background: var(--ssc-superficie); border: 1px solid var(--ssc-borde); }
+:host-context(.ssc-oscuro) .resumen-tarjeta span { color: var(--ssc-secundario); }
+:host-context(.ssc-oscuro) .resumen-tarjeta strong { color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) .panel-encabezado h2 { color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) .campo label { color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) input { border: 1px solid var(--ssc-borde); background: var(--ssc-superficie); color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) .boton-secundario { border: 1px solid var(--ssc-borde); background: var(--ssc-superficie); color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) th { background: var(--ssc-superficie); color: var(--ssc-secundario); }
+:host-context(.ssc-oscuro) td { border-top: 1px solid var(--ssc-borde); color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) td strong { color: var(--ssc-texto); }
+:host-context(.ssc-oscuro) .mensaje-error { background: var(--ssc-superficie); color: var(--ssc-texto); border: 1px solid var(--ssc-borde); }
+:host-context(.ssc-oscuro) .mensaje-exito { background: var(--ssc-superficie); color: var(--ssc-texto); border: 1px solid var(--ssc-borde); }
+:host-context(.ssc-oscuro) .estado-vacio { color: var(--ssc-secundario); }
+
+
+/* ================================================================
+   TEMAS INTEGRADOS · SOLO ESTA PANTALLA
+   Se actualizan fondos Y textos juntos; no se toca la lógica Angular.
+   ================================================================ */
+
+/* Alto contraste: contenedor de página. */
+:host-context(html.ssc-contraste) :host { background: #151515 !important; color: #ffffff !important; }
+:host-context(html.ssc-contraste) .resumen-tarjeta,
+:host-context(html.ssc-contraste) .tarjeta,
+:host-context(html.ssc-contraste) .bloque,
+:host-context(html.ssc-contraste) .panel-filtros,
+:host-context(html.ssc-contraste) .listado,
+:host-context(html.ssc-contraste) .detalle-panel,
+:host-context(html.ssc-contraste) .incidente,
+:host-context(html.ssc-contraste) .formulario,
+:host-context(html.ssc-contraste) .formulario-contenedor,
+:host-context(html.ssc-contraste) .datos-incidente > div,
+:host-context(html.ssc-contraste) .tabla-contenedor,
+:host-context(html.ssc-contraste) .tabla-wrapper,
+:host-context(html.ssc-contraste) .table-container,
+:host-context(html.ssc-contraste) .contenedor-tabla,
+:host-context(html.ssc-contraste) .tabla-card,
+:host-context(html.ssc-contraste) .card,
+:host-context(html.ssc-contraste) .stat-card,
+:host-context(html.ssc-contraste) .summary-card,
+:host-context(html.ssc-contraste) .resumen-card,
+:host-context(html.ssc-contraste) .tarjeta-resumen,
+:host-context(html.ssc-contraste) .panel-admin,
+:host-context(html.ssc-contraste) .seccion,
+:host-context(html.ssc-contraste) .solicitud,
+:host-context(html.ssc-contraste) .alerta-card,
+:host-context(html.ssc-contraste) .detalle-card,
+:host-context(html.ssc-contraste) .modal-contenido,
+:host-context(html.ssc-contraste) .modal-content,
+:host-context(html.ssc-contraste) .tarjeta-estadistica,
+:host-context(html.ssc-contraste) .tarjeta-info,
+:host-context(html.ssc-contraste) .filtros,
+:host-context(html.ssc-contraste) .contenedor-formulario,
+:host-context(html.ssc-contraste) .listado-card,
+:host-context(html.ssc-contraste) .tabla-responsive,
+:host-context(html.ssc-contraste) .form-card,
+:host-context(html.ssc-contraste) .filtro-card,
+:host-context(html.ssc-contraste) .formulario-card,
+:host-context(html.ssc-contraste) .contenido-tarjeta,
+:host-context(html.ssc-contraste) .contenedor-filtros,
+:host-context(html.ssc-contraste) .contenedor-listado,
+:host-context(html.ssc-contraste) .contenedor-tabla,
+:host-context(html.ssc-contraste) .tarjeta-agencia,
+:host-context(html.ssc-contraste) .agencia-card,
+:host-context(html.ssc-contraste) .resultado,
+:host-context(html.ssc-contraste) .info-card,
+:host-context(html.ssc-contraste) .solicitud-card,
+:host-context(html.ssc-contraste) .zona-card,
+:host-context(html.ssc-contraste) .usuario-card,
+:host-context(html.ssc-contraste) .categoria-card,
+:host-context(html.ssc-contraste) .agencia-item,
+:host-context(html.ssc-contraste) .panel-listado { background: #242424 !important; background-image: none !important; color: #ffffff !important; border-color: #8e9aa2 !important; }
+:host-context(html.ssc-contraste) .resumen-tarjeta :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .tarjeta :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .bloque :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .panel-filtros :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .listado :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .detalle-panel :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .incidente :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .formulario :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .formulario-contenedor :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .datos-incidente > div :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .tabla-contenedor :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .tabla-wrapper :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .table-container :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .contenedor-tabla :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .tabla-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .stat-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .summary-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .resumen-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .tarjeta-resumen :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .panel-admin :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .seccion :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .solicitud :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .alerta-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .detalle-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .modal-contenido :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .modal-content :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .tarjeta-estadistica :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .tarjeta-info :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .filtros :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .contenedor-formulario :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .listado-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .tabla-responsive :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .form-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .filtro-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .formulario-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .contenido-tarjeta :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .contenedor-filtros :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .contenedor-listado :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .contenedor-tabla :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .tarjeta-agencia :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .agencia-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .resultado :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .info-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .solicitud-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .zona-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .usuario-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .categoria-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .agencia-item :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-contraste) .panel-listado :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota) { color: #ffffff !important; text-shadow: none !important; }
+:host-context(html.ssc-contraste) .encabezado h1,
+:host-context(html.ssc-contraste) .encabezado p,
+:host-context(html.ssc-contraste) .titulo-seccion h2,
+:host-context(html.ssc-contraste) .titulo-seccion h3,
+:host-context(html.ssc-contraste) .pagina-catalogo h1,
+:host-context(html.ssc-contraste) .pagina-usuarios h1,
+:host-context(html.ssc-contraste) .gestion h1,
+:host-context(html.ssc-contraste) .gestion h2,
+:host-context(html.ssc-contraste) .pagina h1,
+:host-context(html.ssc-contraste) .pagina h2,
+:host-context(html.ssc-contraste) .subtitulo,
+:host-context(html.ssc-contraste) .etiqueta,
+:host-context(html.ssc-contraste) .volver { color: #ffffff !important; }
+:host-context(html.ssc-contraste) .encabezado .etiqueta,
+:host-context(html.ssc-contraste) .etiqueta,
+:host-context(html.ssc-contraste) .volver,
+:host-context(html.ssc-contraste) .boton-volver { color: #67e8f9 !important; }
+:host-context(html.ssc-contraste) input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+:host-context(html.ssc-contraste) select,
+:host-context(html.ssc-contraste) textarea { background: #111111 !important; color: #ffffff !important; border-color: #8e9aa2 !important; }
+:host-context(html.ssc-contraste) input::placeholder,
+:host-context(html.ssc-contraste) textarea::placeholder { color: #e8edf0 !important; opacity: 1; }
+:host-context(html.ssc-contraste) table,
+:host-context(html.ssc-contraste) thead,
+:host-context(html.ssc-contraste) tbody,
+:host-context(html.ssc-contraste) tr,
+:host-context(html.ssc-contraste) td,
+:host-context(html.ssc-contraste) th { border-color: #8e9aa2 !important; }
+:host-context(html.ssc-contraste) table,
+:host-context(html.ssc-contraste) tbody,
+:host-context(html.ssc-contraste) tr,
+:host-context(html.ssc-contraste) td { background: #242424 !important; color: #ffffff !important; }
+:host-context(html.ssc-contraste) thead th { background: #333333 !important; color: #ffffff !important; }
+:host-context(html.ssc-contraste) .boton-volver,
+:host-context(html.ssc-contraste) .boton-secundario,
+:host-context(html.ssc-contraste) .btn-secundario,
+:host-context(html.ssc-contraste) .boton-limpiar,
+:host-context(html.ssc-contraste) .limpiar { background: #242424 !important; color: #67e8f9 !important; border-color: #8e9aa2 !important; }
+:host-context(html.ssc-contraste) .aviso,
+:host-context(html.ssc-contraste) .guia-operador,
+:host-context(html.ssc-contraste) .estado-actual,
+:host-context(html.ssc-contraste) .mensaje.info { background: #17363b !important; color: #ffffff !important; border-color: #8e9aa2 !important; }
+:host-context(html.ssc-contraste) .aviso :is(p,strong,span,small),
+:host-context(html.ssc-contraste) .guia-operador :is(p,strong,span,small),
+:host-context(html.ssc-contraste) .estado-actual :is(p,strong,span,small) { color: #ffffff !important; }
+:host-context(html.ssc-contraste) .pagina-catalogo > .encabezado,
+:host-context(html.ssc-contraste) .pagina-usuarios > .encabezado,
+:host-context(html.ssc-contraste) .gestion > .encabezado { color: #ffffff !important; }
+
+/* Modo oscuro: contenedor de página. */
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) :host { background: var(--ssc-fondo) !important; color: var(--ssc-texto) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .resumen-tarjeta,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .bloque,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .panel-filtros,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .listado,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .detalle-panel,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .incidente,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .formulario,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .formulario-contenedor,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .datos-incidente > div,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tabla-contenedor,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tabla-wrapper,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .table-container,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-tabla,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tabla-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .stat-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .summary-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .resumen-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta-resumen,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .panel-admin,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .seccion,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .solicitud,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .alerta-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .detalle-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .modal-contenido,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .modal-content,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta-estadistica,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta-info,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .filtros,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-formulario,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .listado-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tabla-responsive,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .form-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .filtro-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .formulario-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenido-tarjeta,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-filtros,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-listado,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-tabla,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta-agencia,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .agencia-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .resultado,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .info-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .solicitud-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .zona-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .usuario-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .categoria-card,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .agencia-item,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .panel-listado { background: var(--ssc-superficie) !important; background-image: none !important; color: var(--ssc-texto) !important; border-color: var(--ssc-borde) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .resumen-tarjeta :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .bloque :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .panel-filtros :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .listado :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .detalle-panel :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .incidente :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .formulario :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .formulario-contenedor :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .datos-incidente > div :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tabla-contenedor :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tabla-wrapper :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .table-container :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-tabla :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tabla-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .stat-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .summary-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .resumen-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta-resumen :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .panel-admin :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .seccion :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .solicitud :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .alerta-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .detalle-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .modal-contenido :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .modal-content :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta-estadistica :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta-info :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .filtros :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-formulario :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .listado-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tabla-responsive :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .form-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .filtro-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .formulario-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenido-tarjeta :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-filtros :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-listado :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .contenedor-tabla :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .tarjeta-agencia :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .agencia-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .resultado :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .info-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .solicitud-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .zona-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .usuario-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .categoria-card :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .agencia-item :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .panel-listado :is(h1,h2,h3,h4,h5,h6,p,small,label,legend,dt,dd,.descripcion,.subtitulo,.detalle span,.detalle strong,.resumen-tarjeta span,.resumen-tarjeta strong,.tarjeta span,.tarjeta strong,.numero,.metadatos,.campo label,.encabezado p,.encabezado h1,.titulo-seccion h2,.titulo-seccion h3,.dato-cuenta,.nota) { color: var(--ssc-texto) !important; text-shadow: none !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .encabezado h1,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .encabezado p,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .titulo-seccion h2,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .titulo-seccion h3,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .pagina-catalogo h1,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .pagina-usuarios h1,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .gestion h1,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .gestion h2,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .pagina h1,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .pagina h2,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .subtitulo,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .etiqueta,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .volver { color: var(--ssc-texto) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .encabezado .etiqueta,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .etiqueta,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .volver,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .boton-volver { color: var(--ssc-acento) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) select,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) textarea { background: #17263c !important; color: var(--ssc-texto) !important; border-color: var(--ssc-borde) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) input::placeholder,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) textarea::placeholder { color: var(--ssc-secundario) !important; opacity: 1; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) table,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) thead,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) tbody,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) tr,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) td,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) th { border-color: var(--ssc-borde) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) table,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) tbody,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) tr,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) td { background: var(--ssc-superficie) !important; color: var(--ssc-texto) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) thead th { background: #293b56 !important; color: var(--ssc-texto) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .boton-volver,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .boton-secundario,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .btn-secundario,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .boton-limpiar,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .limpiar { background: var(--ssc-superficie) !important; color: var(--ssc-acento) !important; border-color: var(--ssc-borde) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .aviso,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .guia-operador,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .estado-actual,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .mensaje.info { background: #293e60 !important; color: var(--ssc-texto) !important; border-color: var(--ssc-borde) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .aviso :is(p,strong,span,small),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .guia-operador :is(p,strong,span,small),
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .estado-actual :is(p,strong,span,small) { color: var(--ssc-texto) !important; }
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .pagina-catalogo > .encabezado,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .pagina-usuarios > .encabezado,
+:host-context(html.ssc-oscuro:not(.ssc-contraste)) .gestion > .encabezado { color: var(--ssc-texto) !important; }

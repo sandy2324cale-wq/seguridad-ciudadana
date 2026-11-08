@@ -1,0 +1,505 @@
+
+<div class="pagina-alertas">
+
+  <!-- =====================================
+       ENCABEZADO SEGÚN EL ROL
+  ====================================== -->
+
+  <header class="encabezado">
+
+    <div class="encabezado-superior">
+
+      <span class="etiqueta">
+        {{ etiquetaPagina }}
+      </span>
+
+      <a
+        routerLink="/dashboard"
+        class="volver"
+        aria-label="Volver al panel principal"
+      >
+        <span aria-hidden="true">←</span>
+        Volver al panel
+      </a>
+
+    </div>
+
+    <div class="titulo-principal">
+
+      <div>
+        <h1>Alertas de seguridad</h1>
+
+        <p>{{ descripcionPagina }}</p>
+      </div>
+
+      <!-- SOLO EL OPERADOR VE ESTE BOTÓN -->
+
+      <button
+        *ngIf="esOperador"
+        type="button"
+        class="boton-principal"
+        (click)="abrirFormulario()"
+      >
+        <span aria-hidden="true">＋</span>
+        Nueva alerta
+      </button>
+
+    </div>
+
+  </header>
+
+  <!-- =====================================
+       ESTADÍSTICAS
+       TODOS PUEDEN CONSULTAR
+  ====================================== -->
+
+  <section
+    class="estadisticas"
+    aria-label="Resumen de alertas"
+  >
+
+    <div class="estadistica">
+
+      <span class="estadistica-etiqueta">
+        Total de alertas
+      </span>
+
+      <strong>{{ totalAlertas() }}</strong>
+
+      <span class="estadistica-detalle">
+        Alertas registradas
+      </span>
+
+    </div>
+
+    <div class="estadistica">
+
+      <span class="estadistica-etiqueta">
+        Prioridad alta
+      </span>
+
+      <strong class="texto-rojo">
+        {{ totalAltas() }}
+      </strong>
+
+      <span class="estadistica-detalle">
+        Atención prioritaria
+      </span>
+
+    </div>
+
+    <div class="estadistica">
+
+      <span class="estadistica-etiqueta">
+        Prioridad media
+      </span>
+
+      <strong class="texto-amarillo">
+        {{ totalMedias() }}
+      </strong>
+
+      <span class="estadistica-detalle">
+        Advertencias
+      </span>
+
+    </div>
+
+    <div class="estadistica">
+
+      <span class="estadistica-etiqueta">
+        Prioridad baja
+      </span>
+
+      <strong class="texto-azul">
+        {{ totalBajas() }}
+      </strong>
+
+      <span class="estadistica-detalle">
+        Información general
+      </span>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================
+       LISTADO DE ALERTAS
+  ====================================== -->
+
+  <main class="tarjeta">
+
+    <div class="tarjeta-encabezado">
+
+      <div>
+
+        <h2>Listado de alertas</h2>
+
+        <p>
+          Busca por título, mensaje o nivel de prioridad.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="boton-actualizar"
+        (click)="cargarAlertas()"
+        [disabled]="cargando()"
+      >
+        ↻ Actualizar
+      </button>
+
+    </div>
+
+    <!-- FILTROS -->
+
+    <div class="filtros">
+
+      <div class="campo-busqueda">
+
+        <label for="buscarAlerta">
+          Buscar alertas
+        </label>
+
+        <input
+          id="buscarAlerta"
+          type="search"
+          placeholder="Buscar por título o mensaje..."
+          [value]="buscador()"
+          (input)="cambiarBusqueda($any($event.target).value)"
+        />
+
+      </div>
+
+      <div class="campo-filtro">
+
+        <label for="filtroNivel">
+          Nivel de prioridad
+        </label>
+
+        <select
+          id="filtroNivel"
+          [value]="filtroNivel()"
+          (change)="cambiarFiltro($any($event.target).value)"
+        >
+
+          <option value="TODOS">
+            Todos los niveles
+          </option>
+
+          <option value="ALTO">
+            Alto
+          </option>
+
+          <option value="MEDIO">
+            Medio
+          </option>
+
+          <option value="BAJO">
+            Bajo
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <!-- MENSAJE DE ÉXITO -->
+
+    <div
+      *ngIf="exito()"
+      class="mensaje exito"
+      role="status"
+    >
+      {{ exito() }}
+    </div>
+
+    <!-- MENSAJE DE ERROR -->
+
+    <div
+      *ngIf="error()"
+      class="mensaje error"
+      role="alert"
+    >
+
+      {{ error() }}
+
+      <button
+        type="button"
+        class="reintentar"
+        (click)="cargarAlertas()"
+      >
+        Reintentar
+      </button>
+
+    </div>
+
+    <!-- CARGANDO -->
+
+    <div
+      *ngIf="cargando()"
+      class="estado-vacio"
+      role="status"
+    >
+      Cargando alertas de seguridad...
+    </div>
+
+    <!-- RESULTADOS -->
+
+    <div
+      *ngIf="!cargando() && !error()"
+      class="listado-alertas"
+      aria-live="polite"
+    >
+
+      <p class="contador-resultados">
+        {{ alertasFiltradas().length }}
+        alertas encontradas
+      </p>
+
+      <article
+        *ngFor="let alerta of alertasFiltradas()"
+        class="alerta-item"
+      >
+
+        <div class="alerta-contenido">
+
+          <div class="alerta-superior">
+
+            <h3>{{ alerta.titulo }}</h3>
+
+            <span
+              class="nivel"
+              [ngClass]="claseNivel(alerta.nivel)"
+            >
+              {{ alerta.nivel }}
+            </span>
+
+          </div>
+
+          <p class="alerta-mensaje">
+            {{ alerta.mensaje }}
+          </p>
+
+          <div class="alerta-meta">
+
+            <span>
+              Publicada:
+              {{ formatearFecha(alerta.fechaPublicacion) }}
+            </span>
+
+            <span>
+              Por: {{ nombreEmisor(alerta) }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </article>
+
+      <!-- SIN RESULTADOS -->
+
+      <div
+        *ngIf="alertasFiltradas().length === 0"
+        class="estado-vacio"
+      >
+
+        <h3>No encontramos alertas</h3>
+
+        <p>
+          Prueba con otro término de búsqueda
+          o cambia el filtro de prioridad.
+        </p>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- =====================================
+       MODAL CREAR ALERTA
+       EXCLUSIVO DEL OPERADOR
+  ====================================== -->
+
+  <div
+    *ngIf="esOperador && mostrarFormulario()"
+    class="modal-fondo"
+    (click)="cerrarFormulario()"
+  >
+
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tituloModal"
+      (click)="$event.stopPropagation()"
+    >
+
+      <div class="modal-encabezado">
+
+        <div>
+
+          <span class="etiqueta">
+            NUEVO COMUNICADO
+          </span>
+
+          <h2 id="tituloModal">
+            Publicar alerta
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          class="cerrar-modal"
+          aria-label="Cerrar formulario"
+          (click)="cerrarFormulario()"
+          [disabled]="guardando()"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <p class="modal-descripcion">
+        Completa la información que deseas
+        comunicar a la ciudadanía.
+      </p>
+
+      <!-- ERROR DEL FORMULARIO -->
+
+      <div
+        *ngIf="errorFormulario()"
+        class="mensaje error"
+        role="alert"
+      >
+        {{ errorFormulario() }}
+      </div>
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="crearAlerta()"
+        novalidate
+      >
+
+        <!-- TÍTULO -->
+
+        <div class="campo">
+
+          <label for="tituloAlerta">
+            Título *
+          </label>
+
+          <input
+            id="tituloAlerta"
+            type="text"
+            formControlName="titulo"
+            maxlength="150"
+            placeholder="Ej. Accidente en vía principal"
+          />
+
+          <span
+            *ngIf="
+              formulario.controls.titulo.invalid &&
+              formulario.controls.titulo.touched
+            "
+            class="error-campo"
+          >
+            Ingresa un título de máximo 150 caracteres.
+          </span>
+
+        </div>
+
+        <!-- NIVEL -->
+
+        <div class="campo">
+
+          <label for="nivelAlerta">
+            Nivel de prioridad *
+          </label>
+
+          <select
+            id="nivelAlerta"
+            formControlName="nivel"
+          >
+
+            <option value="BAJO">
+              Bajo
+            </option>
+
+            <option value="MEDIO">
+              Medio
+            </option>
+
+            <option value="ALTO">
+              Alto
+            </option>
+
+          </select>
+
+        </div>
+
+        <!-- MENSAJE -->
+
+        <div class="campo">
+
+          <label for="mensajeAlerta">
+            Mensaje *
+          </label>
+
+          <textarea
+            id="mensajeAlerta"
+            formControlName="mensaje"
+            rows="5"
+            placeholder="Describe el aviso de seguridad..."
+          ></textarea>
+
+          <span
+            *ngIf="
+              formulario.controls.mensaje.invalid &&
+              formulario.controls.mensaje.touched
+            "
+            class="error-campo"
+          >
+            Escribe el mensaje de la alerta.
+          </span>
+
+        </div>
+
+        <!-- ACCIONES -->
+
+        <div class="modal-acciones">
+
+          <button
+            type="button"
+            class="boton-secundario"
+            (click)="cerrarFormulario()"
+            [disabled]="guardando()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="boton-principal"
+            [disabled]="guardando()"
+          >
+            {{
+              guardando()
+                ? 'Publicando...'
+                : 'Publicar alerta'
+            }}
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </div>
+
+</div>

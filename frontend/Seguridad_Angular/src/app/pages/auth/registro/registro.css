@@ -1,0 +1,259 @@
+
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.registro-page {
+  min-height: 100vh;
+  padding: 42px 20px;
+  background:
+    radial-gradient(circle at top left, #dbeafe, transparent 35%),
+    #f4f7fc;
+}
+
+.registro-contenedor {
+  width: 100%;
+  max-width: 790px;
+  margin: 0 auto;
+}
+
+.registro-header {
+  margin-bottom: 28px;
+}
+
+.volver {
+  display: inline-block;
+  margin-bottom: 32px;
+  color: #1d4ed8;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.volver:hover {
+  text-decoration: underline;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 28px;
+  color: #173d83;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.marca-icono {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #1d4ed8;
+  color: white;
+  font-size: 24px;
+}
+
+.etiqueta {
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.encabezado h1 {
+  margin: 10px 0;
+  color: #10213e;
+  font-size: clamp(30px, 5vw, 42px);
+  letter-spacing: -1px;
+}
+
+.encabezado p {
+  max-width: 560px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.registro-card {
+  padding: 38px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 15px 45px rgba(15, 23, 42, 0.06);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.campo {
+  min-width: 0;
+}
+
+.campo-completo {
+  grid-column: 1 / -1;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 9px;
+  color: #26364d;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.campo input {
+  width: 100%;
+  height: 52px;
+  padding: 0 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 11px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo input:focus-visible {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+}
+
+.campo input[aria-invalid="true"] {
+  border-color: #dc2626;
+}
+
+.password-contenedor {
+  position: relative;
+}
+
+.password-contenedor input {
+  padding-right: 100px;
+}
+
+.mostrar-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.campo-error {
+  display: block;
+  margin-top: 7px;
+  color: #b91c1c;
+  font-size: 12px;
+}
+
+.campo-ayuda {
+  display: block;
+  margin-top: 7px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.mensaje-error {
+  margin-bottom: 24px;
+  padding: 14px 16px;
+  border: 1px solid #fecaca;
+  border-radius: 11px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.boton-registro {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 30px;
+  border: none;
+  border-radius: 11px;
+  background: #1d4ed8;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.boton-registro:hover:not(:disabled) {
+  background: #1e40af;
+}
+
+.boton-registro:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.boton-registro:focus-visible,
+.mostrar-password:focus-visible,
+.volver:focus-visible,
+.pie-formulario a:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+.pie-formulario {
+  margin: 27px 0 0;
+  color: #64748b;
+  text-align: center;
+  font-size: 14px;
+}
+
+.pie-formulario a {
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.pie-pagina {
+  margin-top: 28px;
+  color: #94a3b8;
+  text-align: center;
+  font-size: 12px;
+}
+
+@media (max-width: 640px) {
+  .registro-page {
+    padding: 24px 16px;
+  }
+
+  .registro-card {
+    padding: 25px 20px;
+    border-radius: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .campo-completo {
+    grid-column: auto;
+  }
+
+  .encabezado h1 {
+    font-size: 32px;
+  }
+}

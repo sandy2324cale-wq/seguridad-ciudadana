@@ -1,0 +1,494 @@
+
+<div class="pagina-reportes">
+  <div class="contenido-reportes">
+
+    <!-- ENCABEZADO -->
+    <header class="encabezado">
+
+      <div class="encabezado-superior">
+        <span class="etiqueta">PORTAL CIUDADANO</span>
+
+        <a routerLink="/dashboard" class="volver">
+          <span aria-hidden="true">←</span>
+          Volver al panel
+        </a>
+      </div>
+
+      <div class="encabezado-fila">
+        <div>
+          <h1>Mis reportes</h1>
+
+          <p>
+            Consulta tus incidentes y revisa
+            cómo avanza su atención.
+          </p>
+        </div>
+
+        <div class="acciones-encabezado">
+          <button
+            type="button"
+            class="boton-actualizar"
+            (click)="cargarReportes()"
+            [disabled]="cargando()"
+          >
+            ↻ Actualizar
+          </button>
+
+          <a routerLink="/reportar" class="boton-nuevo">
+            + Nuevo reporte
+          </a>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- ESTADÍSTICAS -->
+    <section class="estadisticas" aria-label="Resumen de reportes">
+
+      <div class="estadistica">
+        <span class="estadistica-icono icono-total">▤</span>
+        <span class="estadistica-etiqueta">Total</span>
+        <strong>{{ totalReportes() }}</strong>
+      </div>
+
+      <div class="estadistica">
+        <span class="estadistica-icono icono-pendiente">◷</span>
+        <span class="estadistica-etiqueta">Pendientes</span>
+        <strong>{{ pendientes() }}</strong>
+      </div>
+
+      <div class="estadistica">
+        <span class="estadistica-icono icono-atencion">◉</span>
+        <span class="estadistica-etiqueta">En atención</span>
+        <strong>{{ enAtencion() }}</strong>
+      </div>
+
+      <div class="estadistica">
+        <span class="estadistica-icono icono-resuelto">✓</span>
+        <span class="estadistica-etiqueta">Resueltos</span>
+        <strong>{{ resueltos() }}</strong>
+      </div>
+
+    </section>
+
+    <!-- FILTROS -->
+    <section class="panel-filtros" aria-label="Buscar reportes">
+
+      <div class="filtros-encabezado">
+        <h2>Buscar incidentes</h2>
+        <p>Encuentra un reporte por título, número, zona o categoría.</p>
+      </div>
+
+      <div class="filtros-fila">
+
+        <div class="campo-busqueda">
+          <label for="buscarReporte">Buscar reporte</label>
+
+          <div class="buscador">
+            <span aria-hidden="true">⌕</span>
+
+            <input
+              id="buscarReporte"
+              type="search"
+              placeholder="Ej. Robo, Totoracocha, #3..."
+              [value]="busqueda()"
+              (input)="cambiarBusqueda($any($event.target).value)"
+            />
+          </div>
+        </div>
+
+        <div class="campo-estado">
+          <label for="filtroEstado">Estado</label>
+
+          <select
+            id="filtroEstado"
+            [value]="filtroEstado()"
+            (change)="cambiarEstado($any($event.target).value)"
+          >
+            <option value="TODOS">Todos los estados</option>
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="EN_ATENCION">En atención</option>
+            <option value="RESUELTO">Resuelto</option>
+            <option value="FALSO_REPORTE">Falso reporte</option>
+          </select>
+        </div>
+
+        <button
+          type="button"
+          class="boton-limpiar"
+          (click)="limpiarFiltros()"
+        >
+          Limpiar filtros
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- ERROR -->
+    <div *ngIf="error()" class="mensaje-error" role="alert">
+      <p>{{ error() }}</p>
+
+      <button type="button" (click)="cargarReportes()">
+        Reintentar
+      </button>
+    </div>
+
+    <!-- CARGANDO -->
+    <div
+      *ngIf="cargando()"
+      class="estado-vacio"
+      role="status"
+    >
+      <div class="vacio-icono" aria-hidden="true">◷</div>
+      <h2>Cargando tus reportes...</h2>
+      <p>Consultando la información del sistema.</p>
+    </div>
+
+    <ng-container *ngIf="!cargando() && !error()">
+
+      <!-- SIN REPORTES -->
+      <div *ngIf="totalReportes() === 0" class="estado-vacio">
+        <div class="vacio-icono" aria-hidden="true">▤</div>
+
+        <h2>Todavía no tienes reportes</h2>
+
+        <p>
+          Cuando registres un incidente,
+          podrás consultar su seguimiento aquí.
+        </p>
+
+        <a routerLink="/reportar" class="boton-nuevo">
+          Registrar mi primer incidente
+        </a>
+      </div>
+
+      <!-- LISTADO -->
+      <section
+        *ngIf="totalReportes() > 0"
+        class="listado"
+        aria-label="Listado de reportes"
+      >
+
+        <div class="listado-encabezado">
+          <h2>Incidentes registrados</h2>
+
+          <p>
+            Mostrando {{ reportesFiltrados().length }}
+            de {{ totalReportes() }} reportes
+          </p>
+        </div>
+
+        <div
+          *ngIf="reportesFiltrados().length === 0"
+          class="estado-vacio"
+        >
+          <div class="vacio-icono" aria-hidden="true">⌕</div>
+
+          <h3>No encontramos coincidencias</h3>
+
+          <p>Prueba otra búsqueda o cambia el filtro.</p>
+
+          <button
+            type="button"
+            class="boton-limpiar"
+            (click)="limpiarFiltros()"
+          >
+            Mostrar todos
+          </button>
+        </div>
+
+        <div class="grid-reportes">
+
+          <article
+            *ngFor="let reporte of reportesFiltrados()"
+            class="tarjeta-reporte"
+          >
+
+            <div class="tarjeta-superior">
+              <span class="numero-reporte">
+                Reporte #{{ reporte.id }}
+              </span>
+
+              <span
+                class="estado"
+                [ngClass]="claseEstado(reporte.estado)"
+              >
+                {{ nombreEstado(reporte.estado) }}
+              </span>
+            </div>
+
+            <h3>{{ reporte.titulo }}</h3>
+
+            <p class="descripcion">
+              {{ reporte.descripcion }}
+            </p>
+
+            <div class="detalles">
+
+              <div class="detalle">
+                <span aria-hidden="true">⌖</span>
+
+                <div>
+                  <small>Ubicación</small>
+                  <strong>{{ reporte.nombreZona }}</strong>
+
+                  <span>
+                    {{ reporte.callePrincipal }}
+
+                    <ng-container *ngIf="reporte.calleSecundaria">
+                      y {{ reporte.calleSecundaria }}
+                    </ng-container>
+                  </span>
+                </div>
+              </div>
+
+              <div class="detalle">
+                <span aria-hidden="true">⚑</span>
+
+                <div>
+                  <small>Categoría</small>
+                  <strong>{{ reporte.nombreCategoria }}</strong>
+                </div>
+              </div>
+
+              <div class="detalle">
+                <span aria-hidden="true">◷</span>
+
+                <div>
+                  <small>Fecha del reporte</small>
+
+                  <strong>
+                    {{ reporte.fechaReporte | date:'dd/MM/yyyy, HH:mm' }}
+                  </strong>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="tarjeta-pie">
+              <span>ID: {{ reporte.id }}</span>
+
+              <button
+                type="button"
+                class="boton-seguimiento"
+                (click)="abrirSeguimiento(reporte)"
+              >
+                Ver seguimiento →
+              </button>
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    </ng-container>
+
+    <!-- SEGUIMIENTO DEL INCIDENTE -->
+    <section
+      *ngIf="reporteSeleccionado() as reporte"
+      id="seguimiento-reporte"
+      class="seguimiento-panel"
+      aria-label="Seguimiento del incidente"
+    >
+
+      <div class="seguimiento-encabezado">
+
+        <div>
+          <span class="etiqueta">SEGUIMIENTO CIUDADANO</span>
+
+          <h2>Reporte #{{ reporte.id }}</h2>
+
+          <p>{{ reporte.titulo }}</p>
+        </div>
+
+        <div class="acciones-seguimiento">
+          <button
+            type="button"
+            class="boton-actualizar"
+            (click)="actualizarSeguimiento()"
+            [disabled]="cargandoDetalle()"
+          >
+            ↻ Actualizar
+          </button>
+
+          <button
+            type="button"
+            class="boton-cerrar"
+            (click)="cerrarDetalle()"
+            aria-label="Cerrar seguimiento"
+          >
+            ✕
+          </button>
+        </div>
+
+      </div>
+
+      <div
+        *ngIf="errorDetalle()"
+        class="mensaje-error"
+        role="alert"
+      >
+        {{ errorDetalle() }}
+      </div>
+
+      <div
+        *ngIf="cargandoDetalle()"
+        class="mensaje-informativo"
+        role="status"
+      >
+        Actualizando información del reporte...
+      </div>
+
+      <div class="seguimiento-resumen">
+
+        <div class="seguimiento-dato">
+          <span>Estado actual</span>
+
+          <strong
+            class="estado"
+            [ngClass]="claseEstado(reporte.estado)"
+          >
+            {{ nombreEstado(reporte.estado) }}
+          </strong>
+        </div>
+
+        <div class="seguimiento-dato">
+          <span>Agencia de respuesta</span>
+
+          <strong>{{ nombreAgencia(reporte.agenciaId) }}</strong>
+        </div>
+
+        <div class="seguimiento-dato">
+          <span>Zona</span>
+          <strong>{{ reporte.nombreZona }}</strong>
+        </div>
+
+        <div class="seguimiento-dato">
+          <span>Fecha del reporte</span>
+
+          <strong>
+            {{ reporte.fechaReporte | date:'dd/MM/yyyy, HH:mm' }}
+          </strong>
+        </div>
+
+      </div>
+
+      <div class="seguimiento-descripcion">
+        <h3>Descripción del incidente</h3>
+        <p>{{ reporte.descripcion }}</p>
+
+        <h3>Ubicación reportada</h3>
+        <p>
+          {{ reporte.callePrincipal }}
+
+          <ng-container *ngIf="reporte.calleSecundaria">
+            y {{ reporte.calleSecundaria }}
+          </ng-container>
+        </p>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div class="historial-panel">
+
+        <div class="historial-encabezado">
+          <h3>Historial de atención</h3>
+
+          <p>
+            Consulta los cambios registrados
+            por el personal responsable.
+          </p>
+        </div>
+
+        <div
+          *ngIf="cargandoHistorial()"
+          class="estado-vacio"
+          role="status"
+        >
+          Cargando historial del incidente...
+        </div>
+
+        <div
+          *ngIf="errorHistorial() && !cargandoHistorial()"
+          class="mensaje-error"
+          role="alert"
+        >
+          {{ errorHistorial() }}
+        </div>
+
+        <div
+          *ngIf="
+            !cargandoHistorial() &&
+            !errorHistorial() &&
+            historial().length === 0
+          "
+          class="estado-vacio"
+        >
+          <h3>Aún no hay cambios registrados</h3>
+
+          <p>
+            Cuando el operador actualice el estado,
+            podrás consultar aquí los movimientos.
+          </p>
+        </div>
+
+        <div
+          *ngIf="
+            !cargandoHistorial() &&
+            !errorHistorial() &&
+            historial().length > 0
+          "
+          class="linea-tiempo"
+        >
+
+          <article
+            *ngFor="let evento of historial()"
+            class="evento-historial"
+          >
+
+            <div
+              class="evento-punto"
+              aria-hidden="true"
+            ></div>
+
+            <div class="evento-contenido">
+
+              <div class="evento-superior">
+                <strong>
+                  {{ nombreEstado(evento.estadoNuevo) }}
+                </strong>
+
+                <span>
+                  {{ evento.fechaCambio | date:'dd/MM/yyyy, HH:mm' }}
+                </span>
+              </div>
+
+              <p class="evento-transicion">
+                {{ nombreEstado(evento.estadoAnterior) }}
+                →
+                {{ nombreEstado(evento.estadoNuevo) }}
+              </p>
+
+              <p class="evento-observacion">
+                {{ evento.observacion }}
+              </p>
+
+              <small>
+                Responsable:
+                {{ evento.responsable || 'Personal autorizado' }}
+              </small>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+</div>

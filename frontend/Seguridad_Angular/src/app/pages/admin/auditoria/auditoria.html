@@ -1,0 +1,234 @@
+
+<div class="pagina-auditoria">
+
+  <!-- ======================================
+       1. ENCABEZADO
+       ====================================== -->
+
+  <header class="encabezado">
+    <div>
+      <span class="etiqueta">SUPERADMINISTRACIÓN</span>
+      <h1>Auditoría del sistema</h1>
+      <p>
+        Consulta quién realizó cada acción
+        administrativa y revisa sus detalles.
+      </p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-volver">
+      ← Volver al panel
+    </a>
+  </header>
+
+  <!-- ======================================
+       2. ESTADÍSTICAS
+       ====================================== -->
+
+  <section class="resumen">
+
+    <article class="tarjeta">
+      <span>Registros</span>
+      <strong>{{ totalRegistros() }}</strong>
+    </article>
+
+    <article class="tarjeta">
+      <span>Responsables distintos</span>
+      <strong>{{ totalResponsables() }}</strong>
+    </article>
+
+    <article class="tarjeta">
+      <span>Tipos de acción</span>
+      <strong>{{ totalAcciones() }}</strong>
+    </article>
+
+  </section>
+
+  <!-- ======================================
+       3. ERRORES
+       ====================================== -->
+
+  <div *ngIf="error()" class="mensaje-error" role="alert">
+    {{ error() }}
+  </div>
+
+  <!-- ======================================
+       4. LISTADO Y DETALLE
+       ====================================== -->
+
+  <div
+    class="contenido"
+    [class.con-detalle]="seleccionado() !== null"
+  >
+
+    <section class="panel">
+
+      <div class="panel-encabezado">
+        <div>
+          <h2>Historial de actividad</h2>
+          <p>
+            {{ registrosFiltrados().length }}
+            registros visibles
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="boton-secundario"
+          (click)="cargarAuditoria()"
+          [disabled]="cargando()"
+        >
+          ↻ Actualizar
+        </button>
+      </div>
+
+      <!-- BUSCADOR -->
+
+      <div class="filtros">
+        <input
+          type="search"
+          aria-label="Buscar registros de auditoría"
+          placeholder="Buscar responsable, acción o detalle..."
+          [value]="busqueda()"
+          (input)="cambiarBusqueda($any($event.target).value)"
+        />
+
+        <button
+          type="button"
+          class="boton-secundario"
+          (click)="limpiarBusqueda()"
+        >
+          Limpiar
+        </button>
+      </div>
+
+      <!-- CARGA -->
+
+      <div *ngIf="cargando()" class="estado-vacio">
+        Cargando registros...
+      </div>
+
+      <!-- TABLA -->
+
+      <div
+        *ngIf="!cargando()"
+        class="tabla-contenedor"
+      >
+        <table>
+
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Responsable</th>
+              <th>Acción</th>
+              <th>Detalle</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              *ngFor="let registro of registrosFiltrados()"
+              [class.fila-seleccionada]="
+                seleccionado()?.id === registro.id
+              "
+            >
+              <td>
+                {{ formatearFecha(registro.fecha) }}
+              </td>
+
+              <td>
+                <strong class="responsable">
+                  {{ registro.responsable }}
+                </strong>
+              </td>
+
+              <td>
+                <span class="etiqueta-accion">
+                  {{ nombreAccion(registro.accion) }}
+                </span>
+              </td>
+
+              <td>
+                <span class="detalle-corto">
+                  {{ registro.detalle }}
+                </span>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="boton-secundario"
+                  (click)="seleccionarRegistro(registro)"
+                >
+                  Ver
+                </button>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
+        <div
+          *ngIf="registrosFiltrados().length === 0"
+          class="estado-vacio"
+        >
+          No se encontraron registros.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ====================================
+         5. DETALLE COMPLETO
+         ==================================== -->
+
+    <aside
+      *ngIf="seleccionado() as registro"
+      class="panel panel-detalle"
+    >
+
+      <div class="detalle-encabezado">
+        <div>
+          <span class="etiqueta">REGISTRO DE AUDITORÍA</span>
+          <h2>Registro #{{ registro.id }}</h2>
+        </div>
+
+        <button
+          type="button"
+          class="boton-cerrar"
+          aria-label="Cerrar detalle"
+          (click)="cerrarDetalle()"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div class="datos-registro">
+
+        <div>
+          <span>Responsable</span>
+          <strong>{{ registro.responsable }}</strong>
+        </div>
+
+        <div>
+          <span>Fecha</span>
+          <strong>{{ formatearFecha(registro.fecha) }}</strong>
+        </div>
+
+        <div>
+          <span>Acción</span>
+          <strong>{{ nombreAccion(registro.accion) }}</strong>
+        </div>
+
+      </div>
+
+      <div class="detalle-completo">
+        <h3>Descripción completa</h3>
+        <p>{{ registro.detalle }}</p>
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>

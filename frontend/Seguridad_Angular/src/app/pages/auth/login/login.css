@@ -1,0 +1,727 @@
+
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.login-page {
+  min-height: 100vh;
+  background: #f1f5f9;
+}
+
+.login-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* =========================
+   PANEL IZQUIERDO
+========================= */
+
+.login-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 45px 9%;
+  background:
+    radial-gradient(
+      circle at 10% 85%,
+      rgba(59, 130, 246, 0.28),
+      transparent 35%
+    ),
+    linear-gradient(145deg, #102a57, #123c83 65%, #1d4ed8);
+  color: white;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  height: 45px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.13);
+  font-size: 25px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  letter-spacing: 1px;
+}
+
+.brand-text strong {
+  font-size: 16px;
+}
+
+.brand-text span {
+  color: #bfdbfe;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.info-content {
+  max-width: 540px;
+  padding: 70px 0;
+}
+
+.info-badge {
+  display: inline-block;
+  margin-bottom: 25px;
+  padding: 9px 14px;
+  border: 1px solid rgba(191, 219, 254, 0.25);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #bfdbfe;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.info-content h1 {
+  margin: 0 0 25px;
+  font-size: clamp(34px, 4vw, 57px);
+  font-weight: 800;
+  line-height: 1.14;
+  letter-spacing: -1.8px;
+}
+
+.info-content h1 span {
+  display: block;
+  color: #93c5fd;
+}
+
+.info-content > p {
+  max-width: 470px;
+  margin: 0;
+  color: #dbeafe;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.info-features {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 48px;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.feature-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(147, 197, 253, 0.18);
+  color: #bfdbfe;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.feature > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.feature strong {
+  font-size: 14px;
+}
+
+.feature span {
+  color: #bfdbfe;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.info-footer {
+  margin: 0;
+  color: #bfdbfe;
+  font-size: 11px;
+}
+
+/* =========================
+   PANEL DERECHO
+========================= */
+
+.login-form-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 55px 35px;
+  background: #ffffff;
+}
+
+.login-form-wrapper {
+  width: 100%;
+  max-width: 440px;
+}
+
+.mobile-brand {
+  display: none;
+}
+
+.form-heading {
+  margin-bottom: 35px;
+}
+
+.form-label {
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.form-heading h2 {
+  margin: 12px 0;
+  color: #102a57;
+  font-size: clamp(30px, 3vw, 39px);
+  letter-spacing: -1px;
+}
+
+.form-heading p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* =========================
+   FORMULARIO
+========================= */
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #26364d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 55px;
+  padding: 0 95px 0 45px;
+  border: 1px solid #cbd5e1;
+  border-radius: 11px;
+  background: #fff;
+  color: #10213e;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+.input-wrapper input:focus-visible {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.input-wrapper input[aria-invalid="true"] {
+  border-color: #dc2626;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  color: #64748b;
+  font-size: 19px;
+  pointer-events: none;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  padding: 9px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toggle-password:hover {
+  background: #eff6ff;
+}
+
+.field-error {
+  display: block;
+  margin-top: 8px;
+  color: #b91c1c;
+  font-size: 12px;
+}
+
+.error-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 25px;
+  padding: 14px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.error-alert > span:first-child {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #fee2e2;
+  font-weight: 800;
+}
+
+.login-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 55px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 11px;
+  background: #1d4ed8;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.login-button:hover:not(:disabled) {
+  background: #1e40af;
+  transform: translateY(-1px);
+}
+
+.login-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+/* =========================
+   REGISTRO
+========================= */
+
+.register-section {
+  margin-top: 26px;
+  text-align: center;
+}
+
+.register-section p {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.register-section a {
+  color: #1d4ed8;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.register-section a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   APELACIÓN DE CUENTAS
+========================= */
+
+.appeal-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 30px;
+  padding: 20px;
+  border: 1px solid #bfdbfe;
+  border-radius: 13px;
+  background: #eff6ff;
+}
+
+.appeal-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 25px;
+}
+
+.appeal-content {
+  min-width: 0;
+}
+
+.appeal-content strong {
+  color: #173d83;
+  font-size: 13px;
+}
+
+.appeal-content p {
+  margin: 9px 0 12px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.appeal-content a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.appeal-content a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   PIE DEL FORMULARIO
+========================= */
+
+.form-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  margin-top: 35px;
+  color: #94a3b8;
+  text-align: center;
+  font-size: 11px;
+}
+
+.form-footer span {
+  color: #2563eb;
+}
+
+/* =========================
+   ACCESIBILIDAD
+========================= */
+
+.login-button:focus-visible,
+.toggle-password:focus-visible,
+.register-section a:focus-visible,
+.appeal-content a:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+  .login-info {
+    padding: 40px 7%;
+  }
+
+  .info-content h1 {
+    font-size: 39px;
+  }
+
+  .login-form-section {
+    padding: 40px 25px;
+  }
+}
+
+@media (max-width: 800px) {
+  .login-container {
+    grid-template-columns: 1fr;
+  }
+
+  .login-info {
+    display: none;
+  }
+
+  .login-form-section {
+    min-height: 100vh;
+    padding: 35px 20px;
+  }
+
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 42px;
+    color: #173d83;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+
+  .mobile-brand-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form-section {
+    align-items: flex-start;
+    padding: 25px 17px;
+  }
+
+  .form-heading h2 {
+    font-size: 31px;
+  }
+
+  .appeal-section {
+    padding: 16px;
+  }
+
+  .input-wrapper input {
+    height: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-button,
+  .input-wrapper input {
+    transition: none;
+  }
+
+  .login-button:hover:not(:disabled) {
+    transform: none;
+  }
+}
+.forgot-password-section {
+  display: flex;
+  justify-content: flex-end;
+  margin: -8px 0 20px;
+}
+
+.forgot-password-section a {
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.forgot-password-section a:hover {
+  text-decoration: underline;
+}
+
+.forgot-password-section a:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 4px;
+}
+
+/* =========================================
+   LOGIN: CIUDAD + DISEÑO COMPACTO
+   ========================================= */
+
+.login-page {
+  min-height: 100dvh;
+  padding: 12px;
+  background: #071b40;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 1500px;
+  min-height: calc(100dvh - 24px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 52% 48%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
+}
+
+/* Imagen real como fondo */
+.login-page .login-info {
+  position: relative;
+  isolation: isolate;
+  padding: 24px clamp(24px, 3vw, 48px);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 20, 50, .88),
+      rgba(7, 32, 72, .40)
+    ),
+    url('/images/ciudad-seguridad.jpg')
+      center center / cover no-repeat;
+  color: #fff;
+}
+
+/* Distribución compacta */
+.login-page .info-content {
+  max-width: 560px;
+  padding: 12px 0;
+}
+
+.login-page .info-badge {
+  margin-bottom: 12px;
+  padding: 7px 12px;
+}
+
+.login-page .info-content h1 {
+  margin: 0 0 12px;
+  font-size: clamp(30px, 3vw, 46px);
+  line-height: 1.12;
+}
+
+.login-page .info-content > p {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.login-page .info-features {
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.login-page .feature {
+  gap: 10px;
+}
+
+.login-page .feature-icon {
+  width: 34px;
+  height: 34px;
+}
+
+.login-page .feature strong {
+  font-size: 13px;
+}
+
+.login-page .feature span {
+  font-size: 12px;
+}
+
+.login-page .info-footer {
+  font-size: 11px;
+}
+
+/* Formulario derecho */
+.login-page .login-form-section {
+  padding: 20px clamp(22px, 3vw, 46px);
+  background: linear-gradient(160deg, #fff, #f4f8ff);
+}
+
+.login-page .login-form-wrapper {
+  max-width: 460px;
+}
+
+.login-page .form-heading {
+  margin-bottom: 18px;
+}
+
+.login-page .form-heading h2 {
+  margin: 7px 0;
+  font-size: 32px;
+}
+
+.login-page .form-group {
+  margin-bottom: 12px;
+}
+
+.login-page .form-group label {
+  margin-bottom: 6px;
+}
+
+.login-page .input-wrapper input {
+  height: 46px;
+}
+
+.login-page .forgot-password-section {
+  margin: 0 0 12px;
+}
+
+.login-page .login-button {
+  min-height: 46px;
+  margin-top: 0;
+  background: linear-gradient(90deg, #0751da, #1678f8);
+}
+
+.login-page .register-section {
+  margin-top: 14px;
+}
+
+.login-page .appeal-section {
+  margin-top: 14px;
+  padding: 13px;
+}
+
+.login-page .appeal-content p {
+  margin: 5px 0 7px;
+}
+
+.login-page .form-footer {
+  margin-top: 14px;
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 800px) {
+  .login-container {
+    grid-template-columns: 1fr;
+  }
+
+  .login-page .login-info {
+    display: none;
+  }
+
+  .login-page .login-form-section {
+    min-height: calc(100dvh - 24px);
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 0;
+  }
+
+  .login-container {
+    border-radius: 0;
+  }
+}

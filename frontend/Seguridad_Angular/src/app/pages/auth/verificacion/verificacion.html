@@ -1,0 +1,139 @@
+
+<div class="verificacion-page">
+  <main class="verificacion-card">
+
+    <div class="marca">
+      <span class="marca-icono" aria-hidden="true">◆</span>
+      <span>SEGURIDAD CIUDADANA</span>
+    </div>
+
+    <div class="icono-correo" aria-hidden="true">✉</div>
+
+    <div class="encabezado">
+      <span class="etiqueta">VERIFICACIÓN DE CUENTA</span>
+      <h1>Verifica tu correo</h1>
+      <p>
+        Introduce el código de 6 dígitos que recibiste
+        en tu correo electrónico para activar tu cuenta.
+      </p>
+    </div>
+
+    <div
+      *ngIf="error()"
+      class="mensaje mensaje-error"
+      role="alert"
+    >
+      {{ error() }}
+    </div>
+
+    <div
+      *ngIf="mensaje()"
+      class="mensaje mensaje-exito"
+      role="status"
+    >
+      {{ mensaje() }}
+    </div>
+
+    <ng-container *ngIf="!mostrarExito()">
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="verificar()"
+        novalidate
+      >
+        <div class="campo">
+          <label for="email">Correo electrónico</label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="ejemplo@correo.com"
+            maxlength="100"
+          />
+
+          <small
+            *ngIf="email.touched && email.invalid"
+            class="campo-error"
+          >
+            Ingresa un correo electrónico válido.
+          </small>
+        </div>
+
+        <div class="campo">
+          <label id="codigo-label">
+            Código de verificación
+          </label>
+
+          <div
+            class="codigo-casillas"
+            role="group"
+            aria-labelledby="codigo-label"
+          >
+            <input
+              *ngFor="let digito of digitos; let i = index"
+              #casilla
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              autocomplete="one-time-code"
+              maxlength="6"
+              [value]="digito"
+              [attr.aria-label]="'Dígito ' + (i + 1) + ' de 6'"
+              [disabled]="cargando()"
+              (input)="alEscribir($event, i)"
+              (keydown)="alPresionarTecla($event, i)"
+              (paste)="alPegar($event, i)"
+            />
+          </div>
+
+          <small class="campo-ayuda">
+            Puedes escribir los números uno a uno
+            o pegar el código completo.
+          </small>
+        </div>
+
+        <button
+          type="submit"
+          class="boton-principal"
+          [disabled]="cargando() || reenviando()"
+        >
+          {{ cargando() ? 'Verificando...' : 'Verificar mi cuenta' }}
+        </button>
+      </form>
+
+      <div class="reenviar">
+        <p>¿No recibiste el código?</p>
+
+        <button
+          type="button"
+          class="boton-reenviar"
+          (click)="reenviar()"
+          [disabled]="reenviando() || cargando()"
+        >
+          {{ reenviando() ? 'Reenviando...' : 'Reenviar código' }}
+        </button>
+      </div>
+
+    </ng-container>
+
+    <button
+      *ngIf="mostrarExito()"
+      type="button"
+      class="boton-principal"
+      (click)="irAlLogin()"
+    >
+      Ir al inicio de sesión
+    </button>
+
+    <a routerLink="/login" class="volver">
+      ← Volver al inicio de sesión
+    </a>
+
+    <p class="pie">
+      Sistema de Seguridad Ciudadana · Verificación segura
+    </p>
+
+  </main>
+</div>

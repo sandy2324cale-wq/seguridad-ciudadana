@@ -1,0 +1,186 @@
+
+<div class="pagina-catalogo">
+
+  <!-- ====================================== -->
+  <!-- 1. ENCABEZADO -->
+  <!-- ====================================== -->
+
+  <header class="encabezado">
+    <div>
+      <span class="etiqueta">ADMINISTRACIÓN</span>
+      <h1>Gestión de zonas</h1>
+      <p>
+        Consulta las zonas registradas y administra
+        su información territorial.
+      </p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-volver">
+      ← Volver al panel
+    </a>
+  </header>
+
+  <!-- ====================================== -->
+  <!-- 2. RESUMEN -->
+  <!-- ====================================== -->
+
+  <section class="resumen">
+    <article class="resumen-tarjeta">
+      <span>Total de zonas</span>
+      <strong>{{ totalZonas() }}</strong>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>Resultados visibles</span>
+      <strong>{{ zonasFiltradas().length }}</strong>
+    </article>
+  </section>
+
+  <!-- ====================================== -->
+  <!-- 3. MENSAJES -->
+  <!-- ====================================== -->
+
+  <div *ngIf="error()" class="mensaje-error" role="alert">
+    {{ error() }}
+  </div>
+
+  <div *ngIf="mensaje()" class="mensaje-exito" role="status">
+    {{ mensaje() }}
+  </div>
+
+  <!-- ====================================== -->
+  <!-- 4. FORMULARIO SOLO SUPER_ADMIN -->
+  <!-- ====================================== -->
+
+  <section *ngIf="puedeCrear" class="panel-catalogo">
+
+    <div class="panel-encabezado">
+      <div>
+        <h2>Registrar nueva zona</h2>
+        <p>
+          Ingresa el nombre y el código postal.
+        </p>
+      </div>
+    </div>
+
+    <form class="formulario" (ngSubmit)="guardarZona()">
+
+      <div class="campo">
+        <label for="nombreZona">Nombre de la zona</label>
+
+        <input
+          id="nombreZona"
+          name="nombreZona"
+          type="text"
+          [(ngModel)]="nombreZona"
+          maxlength="80"
+          placeholder="Nombre de la zona"
+          required
+        />
+      </div>
+
+      <div class="campo">
+        <label for="codigoPostal">Código postal</label>
+
+        <input
+          id="codigoPostal"
+          name="codigoPostal"
+          type="text"
+          [(ngModel)]="codigoPostal"
+          maxlength="10"
+          placeholder="Código postal"
+          required
+        />
+      </div>
+
+      <div class="campo campo-boton">
+        <button
+          type="submit"
+          class="boton-principal"
+          [disabled]="guardando() || cargando()"
+        >
+          {{
+            guardando()
+              ? 'Guardando...'
+              : 'Registrar zona'
+          }}
+        </button>
+      </div>
+
+    </form>
+
+  </section>
+
+  <!-- ====================================== -->
+  <!-- 5. LISTADO Y BÚSQUEDA -->
+  <!-- ====================================== -->
+
+  <section class="panel-catalogo">
+
+    <div class="panel-encabezado">
+      <div>
+        <h2>Zonas registradas</h2>
+        <p>Busca por nombre o código postal.</p>
+      </div>
+
+      <button
+        type="button"
+        class="boton-secundario"
+        (click)="cargarZonas()"
+        [disabled]="cargando()"
+      >
+        ↻ Actualizar
+      </button>
+    </div>
+
+    <div class="filtros">
+      <input
+        type="search"
+        placeholder="Buscar zona..."
+        [value]="busqueda()"
+        (input)="cambiarBusqueda($any($event.target).value)"
+      />
+
+      <button
+        type="button"
+        class="boton-secundario"
+        (click)="limpiarBusqueda()"
+      >
+        Limpiar
+      </button>
+    </div>
+
+    <div *ngIf="cargando()" class="estado-vacio">
+      Cargando zonas...
+    </div>
+
+    <div *ngIf="!cargando()" class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre de la zona</th>
+            <th>Código postal</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let zona of zonasFiltradas()">
+            <td>#{{ zona.id }}</td>
+            <td><strong>{{ zona.nombreZona }}</strong></td>
+            <td>{{ zona.codigoPostal }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div
+        *ngIf="zonasFiltradas().length === 0"
+        class="estado-vacio"
+      >
+        No se encontraron zonas.
+      </div>
+    </div>
+
+  </section>
+
+</div>

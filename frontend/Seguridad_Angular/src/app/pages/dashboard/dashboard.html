@@ -1,0 +1,402 @@
+<!-- Dashboard: contenido solamente; menú y encabezado están en App. -->
+    <div class="contenido">
+
+      <!-- BIENVENIDA -->
+      <div class="bienvenida">
+
+        <div>
+          <span class="etiqueta">PANEL DE CONTROL</span>
+          <h1>{{ tituloRol }}</h1>
+          <p>{{ descripcionRol }}</p>
+        </div>
+
+        <div class="indicador-sesion">
+          <span class="punto-verde"></span>
+          Sesión iniciada
+        </div>
+
+      </div>
+
+      <!-- ======================= -->
+      <!-- DASHBOARD DEL CIUDADANO -->
+      <!-- ======================= -->
+
+      <ng-container *ngIf="rol === 'CLIENTE'">
+
+        <section
+          class="tarjetas"
+          aria-label="Resumen de mis reportes"
+        >
+
+          <article class="tarjeta">
+            <div class="tarjeta-icono azul">▤</div>
+            <span>Mis reportes</span>
+            <strong>
+              {{
+                cargandoIncidentes()
+                  ? '...'
+                  : errorIncidentes()
+                    ? '—'
+                    : totalReportes
+              }}
+            </strong>
+            <small>Reportes registrados</small>
+          </article>
+
+          <article class="tarjeta">
+            <div class="tarjeta-icono naranja">◷</div>
+            <span>En seguimiento</span>
+            <strong>
+              {{
+                cargandoIncidentes()
+                  ? '...'
+                  : errorIncidentes()
+                    ? '—'
+                    : totalEnAtencion
+              }}
+            </strong>
+            <small>Incidentes en atención</small>
+          </article>
+
+          <article class="tarjeta">
+            <div class="tarjeta-icono verde">✓</div>
+            <span>Resueltos</span>
+            <strong>
+              {{
+                cargandoIncidentes()
+                  ? '...'
+                  : errorIncidentes()
+                    ? '—'
+                    : totalResueltos
+              }}
+            </strong>
+            <small>Incidentes finalizados</small>
+          </article>
+
+        </section>
+
+        <div
+          *ngIf="errorIncidentes()"
+          class="aviso"
+          role="alert"
+        >
+          {{ errorIncidentes() }}
+        </div>
+
+        <section class="seccion-inferior">
+
+          <article class="bloque">
+
+            <div class="bloque-encabezado">
+              <h2>Mis incidentes</h2>
+              <span class="etiqueta-suave">CIUDADANO</span>
+            </div>
+
+            <p>
+              Registra nuevos incidentes y consulta
+              el estado de los que ya reportaste.
+            </p>
+
+            <div class="acciones-panel">
+
+              <a
+                routerLink="/reportar"
+                class="enlace-accion"
+              >
+                + Reportar incidente
+              </a>
+
+              <a
+                routerLink="/mis-reportes"
+                class="enlace-accion secundario"
+              >
+                Ver mis reportes
+              </a>
+
+            </div>
+
+          </article>
+
+          <article class="bloque bloque-ayuda">
+
+            <div class="ayuda-icono" aria-hidden="true">
+              !
+            </div>
+
+            <h2>Alertas de seguridad</h2>
+
+            <p>
+              Consulta los comunicados publicados
+              sobre situaciones de seguridad ciudadana.
+            </p>
+
+            <div
+              *ngIf="errorAlertas()"
+              class="aviso"
+              role="status"
+            >
+              {{ errorAlertas() }}
+            </div>
+
+            <div
+              *ngIf="!errorAlertas()"
+              class="aviso"
+            >
+              {{
+                cargandoAlertas()
+                  ? 'Consultando alertas...'
+                  : 'Alertas disponibles: ' + totalAlertas
+              }}
+            </div>
+
+            <div class="acciones-panel">
+              <a
+                routerLink="/alertas"
+                class="enlace-accion secundario"
+              >
+                Ver alertas
+              </a>
+            </div>
+
+          </article>
+
+        </section>
+
+      </ng-container>
+
+      <!-- ======================= -->
+      <!-- DASHBOARD DEL OPERADOR -->
+      <!-- ======================= -->
+
+      <ng-container *ngIf="rol === 'OPERADOR'">
+
+        <section
+          class="tarjetas"
+          aria-label="Funciones del operador"
+        >
+
+          <article class="tarjeta">
+            <div class="tarjeta-icono naranja">◷</div>
+            <span>Incidentes pendientes</span>
+            <strong>{{ cargandoIncidentes() ? "..." : errorIncidentes() ? "—" : totalPendientes }}</strong>
+            <small>Incidentes registrados en el sistema</small>
+          </article>
+
+          <article class="tarjeta">
+            <div class="tarjeta-icono azul">⚑</div>
+            <span>En atención</span>
+            <strong>{{ cargandoIncidentes() ? "..." : errorIncidentes() ? "—" : totalEnAtencion }}</strong>
+            <small>Incidentes registrados en el sistema</small>
+          </article>
+
+          <article class="tarjeta">
+            <div class="tarjeta-icono verde">✓</div>
+            <span>Resueltos</span>
+            <strong>{{ cargandoIncidentes() ? "..." : errorIncidentes() ? "—" : totalResueltos }}</strong>
+            <small>Incidentes registrados en el sistema</small>
+          </article>
+
+        </section>
+
+        <section class="seccion-inferior">
+
+          <article class="bloque">
+
+            <div class="bloque-encabezado">
+              <h2>Gestión operativa</h2>
+              <span class="etiqueta-suave">OPERADOR</span>
+            </div>
+
+            <p>
+              Consulta los incidentes registrados,
+              asigna una agencia de respuesta y
+              actualiza el estado de atención.
+            </p>
+
+            <div class="acciones-panel"><a routerLink="/incidentes" class="enlace-accion">Gestionar incidentes</a></div>
+
+            <div class="aviso">
+              Gestiona las asignaciones y los cambios de estado desde el módulo de incidentes.
+            </div>
+
+          </article>
+
+          <article class="bloque bloque-ayuda">
+
+            <div class="ayuda-icono" aria-hidden="true">
+              !
+            </div>
+
+            <h2>Alertas de seguridad</h2>
+
+            <p>
+              Consulta las alertas del sistema y,
+              si tu rol está autorizado, publica
+              nuevos comunicados.
+            </p>
+
+            <div class="acciones-panel">
+              <a
+                routerLink="/alertas-operador"
+                class="enlace-accion"
+              >
+                Ver alertas
+              </a>
+            </div>
+
+          </article>
+
+        </section>
+
+      </ng-container>
+
+      <!-- ======================= -->
+      <!-- DASHBOARD ADMINISTRADOR -->
+      <!-- ======================= -->
+
+      <ng-container *ngIf="rol === 'ADMIN'">
+
+        <section class="seccion-inferior">
+
+          <article class="bloque">
+
+            <div class="bloque-encabezado">
+              <h2>Administración del sistema</h2>
+              <span class="etiqueta-suave">ADMIN</span>
+            </div>
+
+            <p>
+              Administra los catálogos que utiliza
+              el sistema: zonas, categorías y
+              agencias de respuesta.
+            </p>
+
+            <div class="detalle">
+              <span>Gestión de usuarios</span>
+              <strong>Disponible según permisos</strong>
+            </div>
+
+            <div class="detalle">
+              <span>Bloqueos y apelaciones</span>
+              <strong>Disponible</strong>
+            </div>
+
+          </article>
+
+          <article class="bloque bloque-ayuda">
+
+            <div class="ayuda-icono" aria-hidden="true">
+              ⚙
+            </div>
+
+            <h2>Configuración</h2>
+
+            <p>
+              Los catálogos de zonas, categorías
+              y agencias permiten clasificar
+              y gestionar los incidentes.
+            </p>
+
+            <div class="acciones-panel">
+              <a
+                routerLink="/usuarios"
+                class="enlace-accion secundario"
+              >
+                Gestionar usuarios
+              </a>
+            </div>
+
+          </article>
+
+        </section>
+
+      </ng-container>
+
+      <!-- ======================= -->
+      <!-- SUPERADMINISTRADOR -->
+      <!-- ======================= -->
+
+      <ng-container *ngIf="rol === 'SUPER_ADMIN'">
+
+        <section class="seccion-inferior">
+
+          <article class="bloque">
+
+            <div class="bloque-encabezado">
+              <h2>Administración general</h2>
+              <span class="etiqueta-suave">SUPER ADMIN</span>
+            </div>
+
+            <p>
+              Supervisa la administración del sistema,
+              la gestión de usuarios y la configuración
+              de los catálogos principales.
+            </p>
+
+            <div class="detalle">
+              <span>Configuración del sistema</span>
+              <strong>Acceso general</strong>
+            </div>
+
+            <div class="detalle">
+              <span>Auditoría</span>
+              <strong>Disponible</strong>
+            </div>
+
+          </article>
+
+          <article class="bloque bloque-ayuda">
+
+            <div class="ayuda-icono" aria-hidden="true">
+              ⚙
+            </div>
+
+            <h2>Supervisión</h2>
+
+            <p>
+              Desde este panel podrás acceder
+              a las herramientas de administración
+              y supervisión correspondientes a tu rol.
+            </p>
+
+            <div class="acciones-panel">
+              <a
+                routerLink="/auditoria"
+                class="enlace-accion secundario"
+              >
+                Ver auditoría
+              </a>
+            </div>
+
+          </article>
+
+        </section>
+
+      </ng-container>
+
+      <!-- INFORMACIÓN DE SESIÓN -->
+
+      <section class="bloque bloque-sesion">
+
+        <div class="bloque-encabezado">
+          <h2>Información de sesión</h2>
+          <span class="etiqueta-suave">CUENTA</span>
+        </div>
+
+        <div class="detalle">
+          <span>Correo electrónico</span>
+          <strong>{{ email }}</strong>
+        </div>
+
+        <div class="detalle">
+          <span>Rol asignado</span>
+          <strong>{{ rol }}</strong>
+        </div>
+
+      </section>
+
+      <footer class="pie">
+        Sistema de Seguridad Ciudadana · Acceso según roles
+      </footer>
+
+    </div>

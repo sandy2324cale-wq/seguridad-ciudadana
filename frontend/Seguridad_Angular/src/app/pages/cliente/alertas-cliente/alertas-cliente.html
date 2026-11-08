@@ -1,0 +1,186 @@
+
+<div class="pagina-alertas">
+
+  <header class="encabezado">
+
+    <div class="encabezado-superior">
+      <span class="etiqueta">PORTAL CIUDADANO</span>
+
+      <a routerLink="/dashboard" class="volver">
+        ← Volver al panel
+      </a>
+    </div>
+
+    <div class="presentacion">
+      <div class="icono-principal" aria-hidden="true">!</div>
+
+      <div>
+        <h1>Alertas de seguridad</h1>
+        <p>
+          Mantente informado sobre los avisos,
+          recomendaciones y situaciones de seguridad
+          publicados para la ciudadanía.
+        </p>
+      </div>
+    </div>
+
+  </header>
+
+  <section class="resumen" aria-label="Resumen de alertas">
+
+    <article class="resumen-tarjeta">
+      <span>Comunicados disponibles</span>
+      <strong>{{ totalAlertas() }}</strong>
+      <small>Alertas de seguridad publicadas</small>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>Avisos de prioridad alta</span>
+      <strong class="numero-rojo">{{ totalAltas() }}</strong>
+      <small>Comunicados que requieren atención</small>
+    </article>
+
+    <article class="resumen-tarjeta resumen-informativa">
+      <span class="icono-info" aria-hidden="true">✓</span>
+      <strong class="texto-informativo">
+        Información ciudadana
+      </strong>
+      <small>
+        Consulta las recomendaciones y mantente prevenido.
+      </small>
+    </article>
+
+  </section>
+
+  <main class="contenido-alertas">
+
+    <div class="contenido-encabezado">
+      <div>
+        <h2>Comunicados recientes</h2>
+        <p>
+          Revisa las alertas emitidas por el personal
+          de seguridad.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="boton-actualizar"
+        (click)="cargarAlertas()"
+        [disabled]="cargando()"
+      >
+        ↻ Actualizar
+      </button>
+    </div>
+
+    <div class="filtros">
+
+      <div class="campo">
+        <label for="buscarAlerta">Buscar comunicados</label>
+
+        <input
+          id="buscarAlerta"
+          type="search"
+          placeholder="Buscar por título o mensaje..."
+          [value]="buscador()"
+          (input)="cambiarBusqueda($any($event.target).value)"
+        />
+      </div>
+
+      <div class="campo">
+        <label for="nivelAlerta">Tipo de aviso</label>
+
+        <select
+          id="nivelAlerta"
+          [value]="filtroNivel()"
+          (change)="cambiarFiltro($any($event.target).value)"
+        >
+          <option value="TODOS">Todos los avisos</option>
+          <option value="ALTO">Prioridad alta</option>
+          <option value="MEDIO">Precaución</option>
+          <option value="BAJO">Información general</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div *ngIf="error()" class="mensaje-error" role="alert">
+      <p>{{ error() }}</p>
+
+      <button type="button" (click)="cargarAlertas()">
+        Intentar nuevamente
+      </button>
+    </div>
+
+    <div
+      *ngIf="cargando()"
+      class="estado-vacio"
+      role="status"
+    >
+      Cargando comunicados de seguridad...
+    </div>
+
+    <div
+      *ngIf="!cargando() && !error()"
+      class="listado"
+      aria-live="polite"
+    >
+
+      <p class="contador">
+        {{ alertasFiltradas().length }}
+        comunicados encontrados
+      </p>
+
+      <article
+        *ngFor="let alerta of alertasFiltradas()"
+        class="comunicado"
+        [ngClass]="claseNivel(alerta.nivel)"
+      >
+
+        <div class="comunicado-superior">
+
+          <span
+            class="etiqueta-nivel"
+            [ngClass]="claseNivel(alerta.nivel)"
+          >
+            {{ nombreNivel(alerta.nivel) }}
+          </span>
+
+          <time>
+            {{ formatearFecha(alerta.fechaPublicacion) }}
+          </time>
+
+        </div>
+
+        <h3>{{ alerta.titulo }}</h3>
+
+        <p class="mensaje-comunicado">
+          {{ alerta.mensaje }}
+        </p>
+
+        <div class="comunicado-pie">
+          <span aria-hidden="true">◆</span>
+          Publicado por {{ nombreEmisor(alerta) }}
+        </div>
+
+      </article>
+
+      <div
+        *ngIf="alertasFiltradas().length === 0"
+        class="estado-vacio"
+      >
+        <h3>No hay comunicados para mostrar</h3>
+        <p>
+          Prueba otra búsqueda o cambia el tipo de aviso.
+        </p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="pie">
+    Sistema de Seguridad Ciudadana · Información para la comunidad
+  </footer>
+
+</div>

@@ -1,0 +1,618 @@
+
+<div class="pagina">
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+
+    <div class="encabezado-superior">
+
+      <span class="etiqueta">
+        PORTAL CIUDADANO
+      </span>
+
+      <a
+        routerLink="/dashboard"
+        class="volver"
+        aria-label="Volver al panel principal"
+      >
+        <span aria-hidden="true">←</span>
+        <span>Volver al panel</span>
+      </a>
+
+    </div>
+
+    <h1>Reportar incidente</h1>
+
+    <p>
+      Registra un incidente de seguridad ciudadana.
+      Proporciona información clara y precisa para
+      facilitar su atención y seguimiento.
+    </p>
+
+  </header>
+
+  <!-- TARJETA PRINCIPAL -->
+  <main class="tarjeta">
+
+    <!-- CONFIRMACIÓN -->
+    <section
+      *ngIf="enviado(); else formularioReporte"
+      class="confirmacion"
+      aria-live="polite"
+    >
+
+      <div class="confirmacion-icono" aria-hidden="true">
+        ✓
+      </div>
+
+      <h2>¡Incidente registrado!</h2>
+
+      <p>
+        Tu reporte fue enviado correctamente al Sistema
+        de Seguridad Ciudadana.
+        Puedes consultar su estado desde Mis reportes.
+      </p>
+
+      <div class="acciones-confirmacion">
+
+        <button
+          type="button"
+          class="boton-principal"
+          (click)="irAMisReportes()"
+        >
+          Ver mis reportes
+        </button>
+
+        <a
+          routerLink="/dashboard"
+          class="boton-secundario"
+        >
+          Volver al panel
+        </a>
+
+      </div>
+
+    </section>
+
+    <!-- FORMULARIO -->
+    <ng-template #formularioReporte>
+
+      <div class="tarjeta-titulo">
+
+        <div class="titulo-icono" aria-hidden="true">
+          ⚑
+        </div>
+
+        <div>
+          <h2>Información del incidente</h2>
+
+          <p>
+            Los campos marcados con * son obligatorios.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- ERROR GENERAL -->
+      <div
+        *ngIf="error()"
+        class="alerta error"
+        role="alert"
+      >
+        {{ error() }}
+      </div>
+
+      <!-- ERROR DE CATÁLOGOS -->
+      <div
+        *ngIf="errorCatalogos()"
+        class="alerta error"
+        role="alert"
+      >
+
+        <p>{{ errorCatalogos() }}</p>
+
+        <button
+          type="button"
+          class="reintentar"
+          (click)="cargarCatalogos()"
+        >
+          Intentar nuevamente
+        </button>
+
+      </div>
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="enviar()"
+        novalidate
+      >
+
+        <!-- SECCIÓN 1 -->
+        <div class="separador">
+
+          <h3>1. Datos del incidente</h3>
+
+          <p>
+            Describe qué ocurrió de forma clara y precisa.
+          </p>
+
+        </div>
+
+        <!-- TÍTULO -->
+        <div class="campo">
+
+          <label for="titulo">
+            Título del incidente *
+          </label>
+
+          <input
+            id="titulo"
+            type="text"
+            formControlName="titulo"
+            maxlength="100"
+            placeholder="Ej. Robo de pertenencias"
+            autocomplete="off"
+            [attr.aria-invalid]="
+              formulario.controls.titulo.invalid &&
+              formulario.controls.titulo.touched
+            "
+            aria-describedby="ayudaTitulo errorTitulo"
+          />
+
+          <span id="ayudaTitulo" class="ayuda">
+            Escribe un título entre 5 y 100 caracteres.
+          </span>
+
+          <span
+            id="errorTitulo"
+            class="error-campo"
+            *ngIf="
+              formulario.controls.titulo.invalid &&
+              formulario.controls.titulo.touched
+            "
+          >
+            Ingresa un título válido de 5 a 100 caracteres.
+          </span>
+
+        </div>
+
+        <!-- DESCRIPCIÓN -->
+        <div class="campo">
+
+          <label for="descripcion">
+            Descripción del incidente *
+          </label>
+
+          <textarea
+            id="descripcion"
+            formControlName="descripcion"
+            maxlength="500"
+            rows="5"
+            placeholder="Describe qué sucedió y cualquier información relevante..."
+            [attr.aria-invalid]="
+              formulario.controls.descripcion.invalid &&
+              formulario.controls.descripcion.touched
+            "
+            aria-describedby="ayudaDescripcion errorDescripcion"
+          ></textarea>
+
+          <div id="ayudaDescripcion" class="ayuda">
+
+            <span>
+              Entre 10 y 500 caracteres.
+            </span>
+
+            <span>
+              {{ formulario.controls.descripcion.value.length }}/500
+            </span>
+
+          </div>
+
+          <span
+            id="errorDescripcion"
+            class="error-campo"
+            *ngIf="
+              formulario.controls.descripcion.invalid &&
+              formulario.controls.descripcion.touched
+            "
+          >
+            La descripción debe tener entre 10 y 500 caracteres.
+          </span>
+
+        </div>
+
+        <!-- SECCIÓN 2 -->
+        <div class="separador">
+
+          <h3>2. Ubicación del incidente</h3>
+
+          <p>
+            Indica dónde ocurrió el hecho y selecciona
+            la zona correspondiente.
+          </p>
+
+        </div>
+
+        <!-- CALLES -->
+        <div class="fila">
+
+          <div class="campo">
+
+            <label for="callePrincipal">
+              Calle principal *
+            </label>
+
+            <input
+              id="callePrincipal"
+              type="text"
+              formControlName="callePrincipal"
+              maxlength="100"
+              placeholder="Ej. Av. de las Américas"
+              [attr.aria-invalid]="
+                formulario.controls.callePrincipal.invalid &&
+                formulario.controls.callePrincipal.touched
+              "
+            />
+
+            <span
+              class="error-campo"
+              *ngIf="
+                formulario.controls.callePrincipal.invalid &&
+                formulario.controls.callePrincipal.touched
+              "
+            >
+              Ingresa una calle principal de 3 a 100 caracteres.
+            </span>
+
+          </div>
+
+          <div class="campo">
+
+            <label for="calleSecundaria">
+              Calle secundaria (opcional)
+            </label>
+
+            <input
+              id="calleSecundaria"
+              type="text"
+              formControlName="calleSecundaria"
+              maxlength="100"
+              placeholder="Ej. Calle del Batán"
+            />
+
+          </div>
+
+        </div>
+
+        <!-- ZONA -->
+        <div class="campo selector-contenedor">
+
+          <label for="buscarZona">
+            Zona del incidente *
+          </label>
+
+          <div class="selector-moderno">
+
+            <div class="selector-entrada">
+
+              <span aria-hidden="true">⌕</span>
+
+              <input
+                id="buscarZona"
+                type="search"
+                role="combobox"
+                autocomplete="off"
+                placeholder="Buscar o seleccionar zona..."
+                [value]="
+                  zonaAbierta()
+                    ? buscarZona()
+                    : zonaSeleccionada
+                "
+                [disabled]="cargandoDatos()"
+                [attr.aria-expanded]="zonaAbierta()"
+                aria-controls="opcionesZona"
+                aria-autocomplete="list"
+                [attr.aria-activedescendant]="
+                  zonaAbierta() &&
+                  indiceZona() >= 0 &&
+                  zonasFiltradas[indiceZona()]
+                    ? 'zona-opcion-' +
+                      zonasFiltradas[indiceZona()].id
+                    : null
+                "
+                [attr.aria-invalid]="
+                  formulario.controls.zonaId.invalid &&
+                  formulario.controls.zonaId.touched
+                "
+                (focus)="abrirZona()"
+                (input)="cambiarBusquedaZona($any($event.target).value)"
+                (keydown)="tecladoZona($event)"
+              />
+
+              <button
+                type="button"
+                class="selector-flecha"
+                [disabled]="cargandoDatos()"
+                [attr.aria-label]="
+                  zonaAbierta()
+                    ? 'Cerrar lista de zonas'
+                    : 'Abrir lista de zonas'
+                "
+                [attr.aria-expanded]="zonaAbierta()"
+                aria-controls="opcionesZona"
+                (click)="
+                  zonaAbierta()
+                    ? cerrarSelectores()
+                    : abrirZona()
+                "
+              >
+                <span aria-hidden="true">⌄</span>
+              </button>
+
+            </div>
+
+            <!-- OPCIONES DE ZONA -->
+            <div
+              *ngIf="zonaAbierta()"
+              id="opcionesZona"
+              class="selector-opciones"
+              role="listbox"
+              aria-label="Zonas disponibles"
+            >
+
+              <button
+                *ngFor="
+                  let zona of zonasFiltradas;
+                  let i = index
+                "
+                type="button"
+                class="selector-opcion"
+                role="option"
+                [id]="'zona-opcion-' + zona.id"
+                [class.opcion-activa]="indiceZona() === i"
+                [attr.aria-selected]="
+                  formulario.controls.zonaId.value === zona.id
+                "
+                (click)="elegirZona(zona)"
+              >
+
+                <span aria-hidden="true">⌖</span>
+
+                <span>
+                  {{ zona.nombreZona }}
+                </span>
+
+              </button>
+
+              <div
+                *ngIf="zonasFiltradas.length === 0"
+                class="selector-vacio"
+              >
+                No encontramos zonas con ese nombre.
+              </div>
+
+            </div>
+
+          </div>
+
+          <p class="texto-ayuda">
+            {{
+              cargandoDatos()
+                ? 'Cargando zonas disponibles...'
+                : zonaSeleccionada
+                  ? 'Zona seleccionada: ' + zonaSeleccionada
+                  : 'Busca y selecciona una zona de la lista.'
+            }}
+          </p>
+
+          <span
+            class="error-campo"
+            *ngIf="
+              formulario.controls.zonaId.invalid &&
+              formulario.controls.zonaId.touched
+            "
+          >
+            Selecciona una zona válida.
+          </span>
+
+        </div>
+
+        <!-- SECCIÓN 3 -->
+        <div class="separador">
+
+          <h3>3. Clasificación del incidente</h3>
+
+          <p>
+            Selecciona la categoría que mejor describa lo ocurrido.
+          </p>
+
+        </div>
+
+        <!-- CATEGORÍA -->
+        <div class="campo selector-contenedor">
+
+          <label for="buscarCategoria">
+            Categoría del incidente *
+          </label>
+
+          <div class="selector-moderno">
+
+            <div class="selector-entrada">
+
+              <span aria-hidden="true">⌕</span>
+
+              <input
+                id="buscarCategoria"
+                type="search"
+                role="combobox"
+                autocomplete="off"
+                placeholder="Buscar o seleccionar categoría..."
+                [value]="
+                  categoriaAbierta()
+                    ? buscarCategoria()
+                    : categoriaSeleccionada
+                "
+                [disabled]="cargandoDatos()"
+                [attr.aria-expanded]="categoriaAbierta()"
+                aria-controls="opcionesCategoria"
+                aria-autocomplete="list"
+                [attr.aria-activedescendant]="
+                  categoriaAbierta() &&
+                  indiceCategoria() >= 0 &&
+                  categoriasFiltradas[indiceCategoria()]
+                    ? 'categoria-opcion-' +
+                      categoriasFiltradas[indiceCategoria()].id
+                    : null
+                "
+                [attr.aria-invalid]="
+                  formulario.controls.categoriaId.invalid &&
+                  formulario.controls.categoriaId.touched
+                "
+                (focus)="abrirCategoria()"
+                (input)="cambiarBusquedaCategoria($any($event.target).value)"
+                (keydown)="tecladoCategoria($event)"
+              />
+
+              <button
+                type="button"
+                class="selector-flecha"
+                [disabled]="cargandoDatos()"
+                [attr.aria-label]="
+                  categoriaAbierta()
+                    ? 'Cerrar lista de categorías'
+                    : 'Abrir lista de categorías'
+                "
+                [attr.aria-expanded]="categoriaAbierta()"
+                aria-controls="opcionesCategoria"
+                (click)="
+                  categoriaAbierta()
+                    ? cerrarSelectores()
+                    : abrirCategoria()
+                "
+              >
+                <span aria-hidden="true">⌄</span>
+              </button>
+
+            </div>
+
+            <!-- OPCIONES DE CATEGORÍA -->
+            <div
+              *ngIf="categoriaAbierta()"
+              id="opcionesCategoria"
+              class="selector-opciones"
+              role="listbox"
+              aria-label="Categorías disponibles"
+            >
+
+              <button
+                *ngFor="
+                  let categoria of categoriasFiltradas;
+                  let i = index
+                "
+                type="button"
+                class="selector-opcion"
+                role="option"
+                [id]="'categoria-opcion-' + categoria.id"
+                [class.opcion-activa]="indiceCategoria() === i"
+                [attr.aria-selected]="
+                  formulario.controls.categoriaId.value === categoria.id
+                "
+                (click)="elegirCategoria(categoria)"
+              >
+
+                <span aria-hidden="true">⚑</span>
+
+                <span>
+                  {{ categoria.nombre }}
+
+                  <small>
+                    Prioridad: {{ categoria.nivelPrioridad }}
+                  </small>
+                </span>
+
+              </button>
+
+              <div
+                *ngIf="categoriasFiltradas.length === 0"
+                class="selector-vacio"
+              >
+                No encontramos categorías con ese nombre.
+              </div>
+
+            </div>
+
+          </div>
+
+          <p class="texto-ayuda">
+            {{
+              cargandoDatos()
+                ? 'Cargando categorías disponibles...'
+                : categoriaSeleccionada
+                  ? 'Categoría seleccionada: ' + categoriaSeleccionada
+                  : 'Busca y selecciona una categoría de la lista.'
+            }}
+          </p>
+
+          <span
+            class="error-campo"
+            *ngIf="
+              formulario.controls.categoriaId.invalid &&
+              formulario.controls.categoriaId.touched
+            "
+          >
+            Selecciona una categoría válida.
+          </span>
+
+        </div>
+
+        <!-- NOTA -->
+        <aside class="nota">
+
+          <strong>
+            Información importante
+          </strong>
+
+          <p>
+            Proporciona información clara y verídica.
+            Evita registrar incidentes falsos.
+            Tu reporte será gestionado según los
+            procedimientos del sistema.
+          </p>
+
+        </aside>
+
+        <!-- ACCIONES -->
+        <div class="acciones">
+
+          <a
+            routerLink="/dashboard"
+            class="boton-cancelar"
+          >
+            Cancelar
+          </a>
+
+          <button
+            type="submit"
+            class="boton-principal"
+            [disabled]="
+              cargando() ||
+              cargandoDatos() ||
+              !!errorCatalogos()
+            "
+          >
+            {{
+              cargando()
+                ? 'Registrando incidente...'
+                : 'Registrar incidente'
+            }}
+          </button>
+
+        </div>
+
+      </form>
+
+    </ng-template>
+
+  </main>
+
+</div>

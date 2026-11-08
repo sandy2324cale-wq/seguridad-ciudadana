@@ -1,0 +1,274 @@
+    
+<div class="pagina-catalogo">
+
+  <!-- ====================================== -->
+  <!-- 1. ENCABEZADO -->
+  <!-- ====================================== -->
+
+  <header class="encabezado">
+
+    <div>
+      <span class="etiqueta">ADMINISTRACIÓN</span>
+
+      <h1>Gestión de agencias</h1>
+
+      <p>
+        Consulta las agencias de respuesta y registra
+        las instituciones encargadas de atender incidentes.
+      </p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-volver">
+      ← Volver al panel
+    </a>
+
+  </header>
+
+  <!-- ====================================== -->
+  <!-- 2. RESUMEN -->
+  <!-- ====================================== -->
+
+  <section class="resumen">
+
+    <article class="resumen-tarjeta">
+      <span>Total de agencias</span>
+      <strong>{{ totalAgencias() }}</strong>
+    </article>
+
+    <article class="resumen-tarjeta">
+      <span>Resultados visibles</span>
+      <strong>{{ agenciasFiltradas().length }}</strong>
+    </article>
+
+  </section>
+
+  <!-- ====================================== -->
+  <!-- 3. MENSAJES -->
+  <!-- ====================================== -->
+
+  <div
+    *ngIf="error()"
+    class="mensaje-error"
+    role="alert"
+  >
+    {{ error() }}
+  </div>
+
+  <div
+    *ngIf="mensaje()"
+    class="mensaje-exito"
+    role="status"
+  >
+    {{ mensaje() }}
+  </div>
+
+  <!-- ====================================== -->
+  <!-- 4. FORMULARIO SOLO SUPER_ADMIN -->
+  <!-- ====================================== -->
+
+  <section
+    *ngIf="puedeCrear"
+    class="panel-catalogo"
+  >
+
+    <div class="panel-encabezado">
+      <div>
+        <h2>Registrar nueva agencia</h2>
+        <p>
+          Completa los datos de la institución
+          de respuesta.
+        </p>
+      </div>
+    </div>
+
+    <form
+      class="formulario formulario-agencia"
+      (ngSubmit)="guardarAgencia()"
+    >
+
+      <div class="campo">
+
+        <label for="nombreAgencia">
+          Nombre de la agencia
+        </label>
+
+        <input
+          id="nombreAgencia"
+          name="nombreAgencia"
+          type="text"
+          [(ngModel)]="nombre"
+          maxlength="100"
+          placeholder="Nombre de la institución"
+          required
+        />
+
+      </div>
+
+      <div class="campo">
+
+        <label for="siglasAgencia">
+          Siglas
+        </label>
+
+        <input
+          id="siglasAgencia"
+          name="siglasAgencia"
+          type="text"
+          [(ngModel)]="siglas"
+          maxlength="20"
+          placeholder="Siglas"
+          required
+        />
+
+      </div>
+
+      <div class="campo">
+
+        <label for="telefonoAgencia">
+          Teléfono de emergencia
+        </label>
+
+        <input
+          id="telefonoAgencia"
+          name="telefonoAgencia"
+          type="tel"
+          [(ngModel)]="telefonoEmergencia"
+          maxlength="15"
+          placeholder="Teléfono de contacto"
+          required
+        />
+
+      </div>
+
+      <div class="campo campo-boton">
+
+        <button
+          type="submit"
+          class="boton-principal"
+          [disabled]="guardando() || cargando()"
+        >
+          {{
+            guardando()
+              ? 'Guardando...'
+              : 'Registrar agencia'
+          }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+  <!-- ====================================== -->
+  <!-- 5. LISTADO DE AGENCIAS -->
+  <!-- ====================================== -->
+
+  <section class="panel-catalogo">
+
+    <div class="panel-encabezado">
+
+      <div>
+        <h2>Agencias registradas</h2>
+        <p>
+          Busca por nombre, siglas o teléfono.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="boton-secundario"
+        (click)="cargarAgencias()"
+        [disabled]="cargando()"
+      >
+        ↻ Actualizar
+      </button>
+
+    </div>
+
+    <div class="filtros">
+
+      <input
+        type="search"
+        placeholder="Buscar agencia..."
+        [value]="busqueda()"
+        (input)="cambiarBusqueda($any($event.target).value)"
+      />
+
+      <button
+        type="button"
+        class="boton-secundario"
+        (click)="limpiarBusqueda()"
+      >
+        Limpiar
+      </button>
+
+    </div>
+
+    <!-- ESTADO DE CARGA -->
+
+    <div
+      *ngIf="cargando()"
+      class="estado-vacio"
+    >
+      Cargando agencias...
+    </div>
+
+    <!-- TABLA -->
+
+    <div
+      *ngIf="!cargando()"
+      class="tabla-contenedor"
+    >
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Agencia</th>
+            <th>Siglas</th>
+            <th>Teléfono de emergencia</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="let agencia of agenciasFiltradas()"
+          >
+
+            <td>#{{ agencia.id }}</td>
+
+            <td>
+              <strong>{{ agencia.nombre }}</strong>
+            </td>
+
+            <td>
+              <span class="etiqueta-siglas">
+                {{ agencia.siglas }}
+              </span>
+            </td>
+
+            <td>
+              {{ agencia.telefonoEmergencia }}
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <div
+        *ngIf="agenciasFiltradas().length === 0"
+        class="estado-vacio"
+      >
+        No se encontraron agencias.
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

@@ -1,0 +1,632 @@
+/* SISTEMA DE SEGURIDAD CIUDADANA
+   Preferencias globales compatibles con App.aplicarPreferencias().
+   Sustituye COMPLETAMENTE src/styles.css por este archivo.
+   Los componentes con estilos muy especÃ­ficos pueden requerir sus propias variables. */
+*, *::before, *::after { box-sizing: border-box; }
+:root {
+  color-scheme: light;
+  --color-fondo: #f4f7fc;
+  --color-superficie: #ffffff;
+  --color-texto: #182b49;
+  --color-texto-secundario: #4b617d;
+  --color-borde: #cbd5e1;
+  --color-primario: #1747bd;
+  --ssc-fondo: var(--color-fondo);
+  --ssc-superficie: var(--color-superficie);
+  --ssc-texto: var(--color-texto);
+  --ssc-secundario: var(--color-texto-secundario);
+  --ssc-borde: var(--color-borde);
+  --ssc-titulo: #173b74;
+  --ssc-acento: var(--color-primario);
+  --ssc-acento-suave: #eaf2ff;
+  --ssc-peligro: #b42318;
+  --ssc-escala-letra: 1;
+  font-size: 16px;
+}
+html { min-height: 100%; }
+body { margin: 0; min-height: 100vh; font-family: Arial, Helvetica, sans-serif; background: var(--color-fondo); color: var(--color-texto); }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+
+/* 1. MODO OSCURO: app.ts aÃ±ade ssc-oscuro al elemento html. */
+html.ssc-oscuro {
+  color-scheme: dark;
+  --color-fondo: #101a2c;
+  --color-superficie: #1d2b40;
+  --color-texto: #f2f6ff;
+  --color-texto-secundario: #c5d4e9;
+  --color-borde: #60728e;
+  --color-primario: #a9c7ff;
+  --ssc-titulo: #f2f6ff;
+  --ssc-acento-suave: #293e60;
+  --ssc-peligro: #ffb4ae;
+}
+html.ssc-oscuro body { background: var(--color-fondo); color: var(--color-texto); }
+
+/* Fondos de la estructura y contenedores principales. */
+html.ssc-oscuro :is(.estructura-contenido.privada, .contenido-principal, .zona-principal, .contenido, .panel, .dashboard, .bienvenida, .seccion-inferior, .pagina, .pagina-contenido, .contenedor-pagina, .admin-page, .admin-contenido) {
+  background-color: var(--color-fondo) !important;
+  color: var(--color-texto);
+}
+/* Las tarjetas deben cambiar FONDO Y TEXTO al mismo tiempo. */
+html.ssc-oscuro :is(.barra-superior, .tarjeta, .bloque, .bloque-ayuda, .bloque-sesion, .panel-preferencias, .panel-cabecera, .panel-cuerpo, .bloque-preferencia, .desplegable-perfil, .vista-previa, .indicador-sesion, .card, .stat-card, .summary-card, .resumen-card, .tarjeta-resumen, .filtros, .tabla-contenedor, .tabla-wrapper, .table-container, .panel-admin, .contenedor-tabla, .seccion, .formulario-contenedor) {
+  background: var(--color-superficie) !important;
+  background-image: none !important;
+  color: var(--color-texto) !important;
+  border-color: var(--color-borde) !important;
+}
+/* Corregir encabezados y pÃ¡rrafos de las superficies oscuras. */
+html.ssc-oscuro :is(.barra-superior, .tarjeta, .bloque, .panel-preferencias, .desplegable-perfil, .card, .stat-card, .summary-card, .tarjeta-resumen, .panel-admin, .seccion) :is(h1, h2, h3, h4, strong, b, label) {
+  color: var(--color-texto) !important;
+}
+html.ssc-oscuro :is(.barra-superior, .tarjeta, .bloque, .panel-preferencias, .desplegable-perfil, .card, .stat-card, .summary-card, .tarjeta-resumen, .panel-admin, .seccion) :is(p, small, .descripcion, .subtitulo, .nota, .detalle, .dato-cuenta, .usuario-datos, .etiqueta) {
+  color: var(--color-texto-secundario) !important;
+}
+/* Los iconos de tarjetas y los botones conservan sus propios colores de estado. */
+html.ssc-oscuro :is(.barra-superior, .bloque, .tarjeta, .panel-preferencias, .card, .panel-admin) a:not(.enlace-accion):not(.boton):not(.btn) { color: #bcd5ff; }
+html.ssc-oscuro :is(.boton-perfil, .boton-menu, .grupo-opciones button, .boton-restaurar, .desplegable-perfil button, .boton-cerrar) {
+  background: #2a3c56 !important; color: #f5f8ff !important; border-color: #7184a1 !important;
+}
+html.ssc-oscuro :is(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+  background-color: #17263c; color: #f4f7ff; border-color: #8192ac;
+}
+html.ssc-oscuro :is(input, textarea)::placeholder { color: #bdcce1; opacity: 1; }
+html.ssc-oscuro :is(table, thead, tbody, tr, td, th) { border-color: var(--color-borde); }
+html.ssc-oscuro :is(table, tbody, tr, td) { background-color: var(--color-superficie); color: var(--color-texto); }
+html.ssc-oscuro thead th { background-color: #293b56; color: #f4f7ff; }
+/* No invertir a la fuerza los colores de las insignias (aprobada/rechazada),
+   botones de acciÃ³n, avatares o sidebar: esos elementos usan colores semÃ¡nticos. */
+
+
+/* 2. ESCALA TIPOGRÃFICA. Sin zoom: no desplaza el menÃº lateral. */
+html[data-ssc-letra="normal"] { font-size: 16px; --ssc-escala-letra: 1; }
+html[data-ssc-letra="grande"] { font-size: 19px; --ssc-escala-letra: 1.1875; }
+html[data-ssc-letra="muy-grande"] { font-size: 22px; --ssc-escala-letra: 1.375; }
+:is(.tabla-contenedor,.tabla-wrapper,.table-container,.contenedor-tabla) { max-width: 100%; overflow-x: auto; }
+
+/* 3. ALTO CONTRASTE: solo tokens globales y estructura compartida.
+   Los componentes privados adaptan sus superficies y texto en su propio CSS.
+   Evitamos convertir textos en blanco cuando el contenedor sigue blanco. */
+html.ssc-contraste {
+  color-scheme: dark;
+  --color-fondo: #151515;
+  --color-superficie: #242424;
+  --color-texto: #ffffff;
+  --color-texto-secundario: #e8edf0;
+  --color-borde: #8e9aa2;
+  --color-primario: #67e8f9;
+  --ssc-fondo: #151515;
+  --ssc-superficie: #242424;
+  --ssc-texto: #ffffff;
+  --ssc-secundario: #e8edf0;
+  --ssc-borde: #8e9aa2;
+  --ssc-titulo: #ffffff;
+  --ssc-acento: #67e8f9;
+  --ssc-acento-suave: #17363b;
+  --ssc-peligro: #ffb4b4;
+}
+html.ssc-contraste body { background: var(--ssc-fondo); color: var(--ssc-texto); }
+html.ssc-contraste .estructura-contenido.privada,
+html.ssc-contraste .contenido-principal { background: var(--ssc-fondo) !important; color: var(--ssc-texto); }
+html.ssc-contraste :is(.barra-superior,.panel-preferencias,.desplegable-perfil) {
+  background: var(--ssc-superficie) !important;
+  color: var(--ssc-texto) !important;
+  border-color: var(--ssc-borde) !important;
+}
+html.ssc-contraste :is(.barra-superior,.panel-preferencias,.desplegable-perfil) :is(h1,h2,h3,p,strong,small,span,label) {
+  color: var(--ssc-texto);
+}
+html.ssc-contraste .sidebar { background: #1c1c1c !important; color: #ffffff; }
+html.ssc-contraste :focus-visible { outline: 3px solid #ffcc33 !important; outline-offset: 3px !important; }
+/* 4. REDUCCIÃ“N DE MOVIMIENTO. */
+html.ssc-sin-movimiento *,html.ssc-sin-movimiento *::before,html.ssc-sin-movimiento *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =====================================================
+   CORRECCIÃ“N ESPECÃFICA: ALERTAS DEL OPERADOR
+   Agregar al FINAL de src/styles.css
+===================================================== */
+
+/* MODO OSCURO */
+
+html.ssc-oscuro:not(.ssc-contraste) app-alertas .pagina-alertas {
+  background: var(--ssc-fondo) !important;
+  color: var(--ssc-texto) !important;
+}
+
+html.ssc-oscuro:not(.ssc-contraste) app-alertas
+:is(.tarjeta, .estadistica, .alerta-item, .modal) {
+  background: var(--ssc-superficie) !important;
+  color: var(--ssc-texto) !important;
+  border-color: var(--ssc-borde) !important;
+}
+
+html.ssc-oscuro:not(.ssc-contraste) app-alertas
+:is(input, select, textarea) {
+  background: #17263c !important;
+  color: #f4f7ff !important;
+  border-color: #8192ac !important;
+}
+
+/* ALTO CONTRASTE */
+
+html.ssc-contraste app-alertas .pagina-alertas {
+  background: #151515 !important;
+  color: #ffffff !important;
+}
+
+html.ssc-contraste app-alertas
+:is(.tarjeta, .estadistica, .alerta-item, .modal) {
+  background: #242424 !important;
+  color: #ffffff !important;
+  border: 1px solid #a3a3a3 !important;
+  box-shadow: none !important;
+}
+
+html.ssc-contraste app-alertas
+:is(h1, h2, h3, label, .estadistica-etiqueta) {
+  color: #ffffff !important;
+}
+
+html.ssc-contraste app-alertas
+:is(.alerta-mensaje, .alerta-meta, .estadistica-detalle,
+    .contador-resultados, .modal-descripcion) {
+  color: #e8edf0 !important;
+}
+
+html.ssc-contraste app-alertas
+:is(input, select, textarea) {
+  background: #101010 !important;
+  color: #ffffff !important;
+  border: 1px solid #a3a3a3 !important;
+}
+
+html.ssc-contraste app-alertas .boton-principal {
+  background: #67e8f9 !important;
+  color: #000000 !important;
+  border-color: #67e8f9 !important;
+}
+
+/* MODO CLARO
+   Solo actÃºa cuando no estÃ¡n activos
+   ni oscuro ni alto contraste.
+*/
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-alertas .pagina-alertas {
+  background: #f4f7fc !important;
+  color: #182b49 !important;
+}
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-alertas :is(.tarjeta, .estadistica, .alerta-item, .modal) {
+  background: #ffffff !important;
+  color: #182b49 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-alertas :is(input, select, textarea) {
+  background: #ffffff !important;
+  color: #182b49 !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* =====================================================
+   GESTIÃ“N DE INCIDENTES
+   CORRECCIÃ“N DE TEMAS CLARO, OSCURO Y CONTRASTE
+
+   Ruta: /incidentes
+   Componente: app-gestionar-incidentes
+
+   No modifica la estructura ni las funciones.
+===================================================== */
+
+/* MODO CLARO */
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-gestionar-incidentes {
+  background: #f3f6fc !important;
+  color: #142c53 !important;
+}
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-gestionar-incidentes
+:is(.gestion, .pagina, .contenido) {
+  background: #f3f6fc !important;
+  color: #142c53 !important;
+}
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-gestionar-incidentes
+:is(
+  .resumen-tarjeta,
+  .panel-filtros,
+  .listado,
+  .detalle-panel,
+  .incidente,
+  .datos-incidente,
+  .formulario,
+  .historial,
+  .evento
+) {
+  background: #ffffff !important;
+  color: #142c53 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-gestionar-incidentes
+:is(input, select, textarea) {
+  background: #ffffff !important;
+  color: #142c53 !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* MODO OSCURO */
+
+html.ssc-oscuro:not(.ssc-contraste)
+app-gestionar-incidentes {
+  background: #101a2c !important;
+  color: #f2f6ff !important;
+}
+
+html.ssc-oscuro:not(.ssc-contraste)
+app-gestionar-incidentes
+:is(.gestion, .pagina, .contenido) {
+  background: #101a2c !important;
+  color: #f2f6ff !important;
+}
+
+html.ssc-oscuro:not(.ssc-contraste)
+app-gestionar-incidentes
+:is(
+  .resumen-tarjeta,
+  .panel-filtros,
+  .listado,
+  .detalle-panel,
+  .incidente,
+  .datos-incidente,
+  .formulario,
+  .historial,
+  .evento
+) {
+  background: #1d2b40 !important;
+  color: #f2f6ff !important;
+  border-color: #60728e !important;
+}
+
+html.ssc-oscuro:not(.ssc-contraste)
+app-gestionar-incidentes
+:is(input, select, textarea) {
+  background: #17263c !important;
+  color: #f4f7ff !important;
+  border-color: #8192ac !important;
+}
+
+/* ALTO CONTRASTE */
+
+html.ssc-contraste app-gestionar-incidentes {
+  background: #151515 !important;
+  color: #ffffff !important;
+}
+
+html.ssc-contraste app-gestionar-incidentes
+:is(.gestion, .pagina, .contenido) {
+  background: #151515 !important;
+  color: #ffffff !important;
+}
+
+html.ssc-contraste app-gestionar-incidentes
+:is(
+  .resumen-tarjeta,
+  .panel-filtros,
+  .listado,
+  .detalle-panel,
+  .incidente,
+  .datos-incidente,
+  .formulario,
+  .historial,
+  .evento
+) {
+  background: #242424 !important;
+  color: #ffffff !important;
+  border-color: #a3a3a3 !important;
+}
+
+html.ssc-contraste app-gestionar-incidentes
+:is(input, select, textarea) {
+  background: #101010 !important;
+  color: #ffffff !important;
+  border-color: #a3a3a3 !important;
+}
+
+
+/* =====================================================
+   ALERTAS DEL CIUDADANO
+   CorrecciÃ³n de campos segÃºn el tema seleccionado
+
+   Componente esperado: app-alertas-cliente
+===================================================== */
+
+/* MODO CLARO */
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-alertas-cliente :is(input, select, textarea) {
+  background: #ffffff !important;
+  color: #142d55 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-alertas-cliente :is(input, textarea)::placeholder {
+  color: #64748b !important;
+  opacity: 1;
+}
+
+html:not(.ssc-oscuro):not(.ssc-contraste)
+app-alertas-cliente .campo label {
+  color: #142d55 !important;
+}
+
+/* MODO OSCURO */
+
+html.ssc-oscuro:not(.ssc-contraste)
+app-alertas-cliente :is(input, select, textarea) {
+  background: #17263c !important;
+  color: #f4f7ff !important;
+  border-color: #8192ac !important;
+}
+
+/* ALTO CONTRASTE */
+
+html.ssc-contraste
+app-alertas-cliente :is(input, select, textarea) {
+  background: #101010 !important;
+  color: #ffffff !important;
+  border-color: #a3a3a3 !important;
+}
+
+
+/* ============================================================
+   REPARACION DE TEMAS - Dashboard, Alertas y Mis reportes
+   Las reglas se limitan a sus componentes Angular.
+   Orden de prioridad: contraste > oscuro > claro.
+   ============================================================ */
+
+/* Colores propios de cada tema. */
+html:not(.ssc-oscuro):not(.ssc-contraste) {
+  --fix-fondo: #f4f7fc; --fix-panel: #ffffff; --fix-texto: #142d55;
+  --fix-secundario: #526784; --fix-borde: #dce5f2;
+  --fix-campo: #ffffff; --fix-enlace: #1d4ed8;
+  --fix-suave: #eaf2ff; --fix-suave-texto: #1747bd;
+}
+html.ssc-oscuro:not(.ssc-contraste) {
+  --fix-fondo: #101a2c; --fix-panel: #1d2b40; --fix-texto: #f2f6ff;
+  --fix-secundario: #c5d4e9; --fix-borde: #60728e;
+  --fix-campo: #17263c; --fix-enlace: #bcd5ff;
+  --fix-suave: #293e60; --fix-suave-texto: #d5e5ff;
+}
+html.ssc-contraste {
+  --fix-fondo: #151515; --fix-panel: #242424; --fix-texto: #ffffff;
+  --fix-secundario: #e8edf0; --fix-borde: #a3a3a3;
+  --fix-campo: #101010; --fix-enlace: #67e8f9;
+  --fix-suave: #343434; --fix-suave-texto: #ffffff;
+}
+
+/* DASHBOARD: el fondo y las tarjetas cambian juntos. */
+html :is(app-dashboard, app-dashboard .contenido, app-dashboard .bienvenida, app-dashboard .seccion-inferior) {
+  background-color: var(--fix-fondo) !important;
+  color: var(--fix-texto) !important;
+}
+html app-dashboard :is(.tarjeta, .bloque, .bloque-ayuda, .bloque-sesion) {
+  background: var(--fix-panel) !important;
+  background-image: none !important;
+  border-color: var(--fix-borde) !important;
+  color: var(--fix-texto) !important;
+}
+html app-dashboard :is(.bienvenida h1, .bloque h2, .tarjeta > strong, .detalle strong) {
+  color: var(--fix-texto) !important;
+}
+html app-dashboard :is(.bienvenida p, .tarjeta > span, .tarjeta > small, .bloque > p, .detalle span, .pie) {
+  color: var(--fix-secundario) !important;
+}
+html app-dashboard :is(.etiqueta, .etiqueta-suave) {
+  color: var(--fix-enlace) !important;
+}
+html app-dashboard :is(.etiqueta-suave, .aviso) {
+  background: var(--fix-suave) !important;
+  border-color: var(--fix-borde) !important;
+  color: var(--fix-suave-texto) !important;
+}
+html app-dashboard .enlace-accion.secundario {
+  background: var(--fix-panel) !important;
+  color: var(--fix-enlace) !important;
+  border-color: var(--fix-borde) !important;
+}
+html app-dashboard .indicador-sesion {
+  background: #eafbf0 !important;
+  color: #14532d !important;
+  border-color: #86efac !important;
+}
+html.ssc-contraste app-dashboard .indicador-sesion {
+  background: #123321 !important;
+  color: #bbf7d0 !important;
+  border-color: #86efac !important;
+}
+
+/* ALERTAS CIUDADANO: corrige también el :host y no solo los inputs. */
+html app-alertas-cliente,
+html app-alertas-cliente .pagina-alertas {
+  background: var(--fix-fondo) !important;
+  color: var(--fix-texto) !important;
+}
+html app-alertas-cliente :is(.resumen-tarjeta, .contenido-alertas, .comunicado) {
+  background: var(--fix-panel) !important;
+  background-image: none !important;
+  border-color: var(--fix-borde) !important;
+  color: var(--fix-texto) !important;
+}
+html app-alertas-cliente :is(.presentacion h1, .contenido-encabezado h2, .comunicado h3, .resumen-tarjeta > strong:not(.numero-rojo), .resumen-tarjeta > strong.texto-informativo, .estado-vacio h3) {
+  color: var(--fix-texto) !important;
+}
+html app-alertas-cliente :is(.presentacion p, .contenido-encabezado p, .resumen-tarjeta > span:first-child, .resumen-tarjeta small, .mensaje-comunicado, .comunicado-pie span, .comunicado-superior time, .contador, .estado-vacio, .pie) {
+  color: var(--fix-secundario) !important;
+}
+html app-alertas-cliente :is(.etiqueta, .volver) {
+  color: var(--fix-enlace) !important;
+}
+html app-alertas-cliente :is(.volver, .boton-actualizar) {
+  background: var(--fix-panel) !important;
+  color: var(--fix-enlace) !important;
+  border-color: var(--fix-borde) !important;
+}
+html app-alertas-cliente :is(.icono-principal, .icono-info) {
+  background: var(--fix-suave) !important;
+  color: var(--fix-suave-texto) !important;
+}
+html app-alertas-cliente .campo label {
+  color: var(--fix-texto) !important;
+}
+html app-alertas-cliente :is(input, select, textarea) {
+  background: var(--fix-campo) !important;
+  color: var(--fix-texto) !important;
+  border-color: var(--fix-borde) !important;
+  color-scheme: inherit;
+}
+html app-alertas-cliente :is(input, textarea)::placeholder {
+  color: var(--fix-secundario) !important;
+  opacity: 1;
+}
+html.ssc-contraste app-alertas-cliente .resumen-tarjeta > strong.numero-rojo {
+  color: #ffb4b4 !important;
+}
+
+/* MIS REPORTES: el CSS original está fijado en negro.
+   Se respetan su estructura, sus grids y sus estados semánticos. */
+html app-mis-reportes,
+html app-mis-reportes :is(.pagina-reportes, .contenido-reportes) {
+  background: var(--fix-fondo) !important;
+  color: var(--fix-texto) !important;
+}
+html app-mis-reportes :is(
+  .estadistica, .panel-filtros, .tarjeta-reporte, .seguimiento-panel,
+  .seguimiento-dato, .evento-contenido, .estado-vacio, .historial-panel
+) {
+  background: var(--fix-panel) !important;
+  background-image: none !important;
+  color: var(--fix-texto) !important;
+  border-color: var(--fix-borde) !important;
+}
+html app-mis-reportes :is(
+  .encabezado h1, .filtros-encabezado h2, .listado-encabezado h2,
+  .tarjeta-reporte h3, .estadistica strong, .seguimiento-encabezado h2,
+  .seguimiento-descripcion h3, .estado-vacio h3, .evento-superior strong,
+  .seguimiento-dato > strong, .detalle strong
+) { color: var(--fix-texto) !important; }
+html app-mis-reportes :is(
+  .encabezado p, .filtros-encabezado p, .listado-encabezado p,
+  .estadistica-etiqueta, .descripcion, .detalle > span,
+  .detalle div > span, .seguimiento-encabezado p,
+  .seguimiento-descripcion p, .seguimiento-dato > span,
+  .evento-contenido small, .evento-observacion, .estado-vacio p
+) { color: var(--fix-secundario) !important; }
+html app-mis-reportes :is(.etiqueta, .numero-reporte) {
+  color: var(--fix-enlace) !important;
+}
+html app-mis-reportes :is(.volver, .boton-limpiar, .boton-cerrar, .boton-seguimiento) {
+  background: var(--fix-panel) !important;
+  color: var(--fix-enlace) !important;
+  border-color: var(--fix-borde) !important;
+}
+html app-mis-reportes :is(.buscador, .buscador input, .campo-estado select) {
+  background: var(--fix-campo) !important;
+  color: var(--fix-texto) !important;
+  border-color: var(--fix-borde) !important;
+}
+html app-mis-reportes :is(.campo-estado label, .buscador span) {
+  color: var(--fix-texto) !important;
+}
+html app-mis-reportes .buscador input::placeholder {
+  color: var(--fix-secundario) !important;
+  opacity: 1;
+}
+html app-mis-reportes .campo-estado select option {
+  background: var(--fix-campo) !important;
+  color: var(--fix-texto) !important;
+}
+html app-mis-reportes :is(.seguimiento, .detalles, .tarjeta-pie, .evento-transicion) {
+  border-color: var(--fix-borde) !important;
+}
+html.ssc-contraste app-mis-reportes :is(.estadistica, .panel-filtros, .tarjeta-reporte, .seguimiento-panel, .evento-contenido) {
+  box-shadow: none !important;
+}
+
+/* Elementos claros/azules que quedan en fondos oscuros. */
+html.ssc-oscuro app-mis-reportes :is(.estadistica-icono, .vacio-icono),
+html.ssc-contraste app-mis-reportes :is(.estadistica-icono, .vacio-icono) {
+  color: var(--fix-suave-texto) !important;
+}
+
+/* Corrección final: el panel de preferencias nunca es transparente. */
+html .panel-preferencias {
+  background: var(--ssc-superficie) !important;
+  color: var(--ssc-texto) !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  isolation: isolate;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+html .panel-preferencias :is(.panel-cabecera,.panel-cuerpo,.bloque-preferencia) {
+  background: var(--ssc-superficie) !important;
+  color: var(--ssc-texto) !important;
+  opacity: 1 !important;
+}
+html .panel-preferencias :is(h2,h3,strong,label) {color:var(--ssc-texto) !important;}
+html .panel-preferencias :is(p,small,.nota,.dato-cuenta span) {color:var(--ssc-secundario) !important;}
+html .panel-preferencias .grupo-opciones button,
+html .panel-preferencias .boton-restaurar,
+html .panel-preferencias .boton-cerrar {
+  background:var(--ssc-superficie) !important;
+  color:var(--ssc-texto) !important;
+  border-color:var(--ssc-borde) !important;
+}
+html .panel-preferencias .grupo-opciones button.seleccionado {
+  background:var(--ssc-acento-suave) !important;
+  color:var(--ssc-acento) !important;
+  border-color:var(--ssc-acento) !important;
+}
+html .panel-preferencias .vista-previa {
+  background:var(--ssc-fondo) !important;
+  color:var(--ssc-texto) !important;
+}
+/* Operador: mismo sistema de colores en los tres modos. */
+html app-alertas .pagina-alertas {background:var(--ssc-fondo) !important;color:var(--ssc-texto) !important;}
+html app-alertas :is(.tarjeta,.estadistica,.alerta-item,.modal) {
+  background:var(--ssc-superficie) !important;
+  color:var(--ssc-texto) !important;
+  border-color:var(--ssc-borde) !important;
+}
+html app-alertas :is(.titulo-principal h1,.tarjeta-encabezado h2,.alerta-superior h3,.modal-encabezado h2) {color:var(--ssc-titulo) !important;}
+html app-alertas :is(.titulo-principal p,.tarjeta-encabezado p,.estadistica-etiqueta,.estadistica-detalle,.contador-resultados,.alerta-meta,.modal-descripcion) {color:var(--ssc-secundario) !important;}
+html app-alertas :is(.campo-busqueda label,.campo-filtro label,.campo label,.alerta-mensaje) {color:var(--ssc-texto) !important;}
+html app-alertas :is(input,select,textarea) {
+  background:var(--ssc-superficie) !important;
+  color:var(--ssc-texto) !important;
+  border-color:var(--ssc-borde) !important;
+}
+html app-alertas :is(input,textarea)::placeholder {color:var(--ssc-secundario) !important;opacity:1;}
+html.ssc-contraste app-alertas :is(.tarjeta,.estadistica,.alerta-item,.modal) {box-shadow:none !important;}

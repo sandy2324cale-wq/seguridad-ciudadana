@@ -1,0 +1,183 @@
+
+<div class="registro-page">
+  <main class="registro-contenedor">
+    <div class="registro-header">
+      <a routerLink="/login" class="volver">
+        ← Volver al inicio de sesión
+      </a>
+
+      <div class="marca">
+        <span class="marca-icono" aria-hidden="true">◆</span>
+        <span>SEGURIDAD CIUDADANA</span>
+      </div>
+
+      <div class="encabezado">
+        <span class="etiqueta">REGISTRO CIUDADANO</span>
+        <h1>Crea tu cuenta</h1>
+        <p>
+          Regístrate para reportar incidentes y dar seguimiento
+          a la seguridad de tu comunidad.
+        </p>
+      </div>
+    </div>
+
+    <section class="registro-card" aria-label="Formulario de registro">
+      <div
+        *ngIf="error()"
+        class="mensaje-error"
+        role="alert"
+      >
+        {{ error() }}
+      </div>
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="registrar()"
+        novalidate
+      >
+        <div class="form-grid">
+          <div class="campo">
+            <label for="cedula">Cédula</label>
+            <input
+              id="cedula"
+              type="text"
+              inputmode="numeric"
+              maxlength="10"
+              formControlName="cedula"
+              placeholder="10 dígitos"
+              autocomplete="off"
+              [attr.aria-invalid]="campos.cedula.invalid && campos.cedula.touched"
+              aria-describedby="cedula-error"
+            />
+            <small
+              id="cedula-error"
+              class="campo-error"
+              *ngIf="campos.cedula.touched && campos.cedula.invalid"
+            >
+              Ingresa una cédula de exactamente 10 dígitos.
+            </small>
+          </div>
+
+          <div class="campo">
+            <label for="nombre">Nombre</label>
+            <input
+              id="nombre"
+              type="text"
+              formControlName="nombre"
+              placeholder="Tu nombre"
+              autocomplete="given-name"
+              maxlength="50"
+              [attr.aria-invalid]="campos.nombre.invalid && campos.nombre.touched"
+              aria-describedby="nombre-error"
+            />
+            <small
+              id="nombre-error"
+              class="campo-error"
+              *ngIf="campos.nombre.touched && campos.nombre.invalid"
+            >
+              El nombre debe tener entre 2 y 50 caracteres.
+            </small>
+          </div>
+
+          <div class="campo">
+            <label for="apellido">Apellido</label>
+            <input
+              id="apellido"
+              type="text"
+              formControlName="apellido"
+              placeholder="Tu apellido"
+              autocomplete="family-name"
+              maxlength="50"
+              [attr.aria-invalid]="campos.apellido.invalid && campos.apellido.touched"
+              aria-describedby="apellido-error"
+            />
+            <small
+              id="apellido-error"
+              class="campo-error"
+              *ngIf="campos.apellido.touched && campos.apellido.invalid"
+            >
+              El apellido debe tener entre 2 y 50 caracteres.
+            </small>
+          </div>
+
+          <div class="campo">
+            <label for="email">Correo electrónico</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="ejemplo@correo.com"
+              autocomplete="email"
+              maxlength="100"
+              [attr.aria-invalid]="campos.email.invalid && campos.email.touched"
+              aria-describedby="email-error"
+            />
+            <small
+              id="email-error"
+              class="campo-error"
+              *ngIf="campos.email.touched && campos.email.invalid"
+            >
+              Ingresa un correo electrónico válido.
+            </small>
+          </div>
+
+          <div class="campo campo-completo">
+            <label for="password">Contraseña</label>
+
+            <div class="password-contenedor">
+              <input
+                id="password"
+                [type]="mostrarPassword() ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Mínimo 8 caracteres"
+                autocomplete="new-password"
+                maxlength="100"
+                [attr.aria-invalid]="campos.password.invalid && campos.password.touched"
+                aria-describedby="password-ayuda password-error"
+              />
+
+              <button
+                type="button"
+                class="mostrar-password"
+                (click)="alternarPassword()"
+                [attr.aria-label]="mostrarPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                [attr.aria-pressed]="mostrarPassword()"
+              >
+                {{ mostrarPassword() ? 'Ocultar' : 'Mostrar' }}
+              </button>
+            </div>
+
+            <small id="password-ayuda" class="campo-ayuda">
+              Utiliza una contraseña de al menos 8 caracteres.
+            </small>
+
+            <small
+              id="password-error"
+              class="campo-error"
+              *ngIf="campos.password.touched && campos.password.invalid"
+            >
+              La contraseña debe tener entre 8 y 100 caracteres.
+            </small>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="boton-registro"
+          [disabled]="cargando()"
+        >
+          {{ cargando() ? 'Registrando cuenta...' : 'Crear mi cuenta' }}
+        </button>
+      </form>
+
+      <p class="pie-formulario">
+        ¿Ya tienes una cuenta?
+        <a routerLink="/login">Inicia sesión</a>
+      </p>
+    </section>
+
+    <p class="pie-pagina">
+      Sistema de Seguridad Ciudadana · Registro seguro
+    </p>
+  </main>
+</div>
